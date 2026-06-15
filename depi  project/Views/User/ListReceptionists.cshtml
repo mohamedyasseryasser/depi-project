@@ -1,0 +1,62 @@
+﻿@model IEnumerable<depi__project.viewmodels.userviewmodel.responsereceptionistviewmodel>
+
+@{
+    ViewData["Title"] = "Receptionists List";
+}
+
+<h1>Receptionists List</h1>
+
+<p>
+    <a asp-action="AddReceptionist" class="btn btn-success">Add New Receptionist</a>
+</p>
+<form asp-action="ListReceptionists" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name or email: <input type="text" name="SearchTerm" value="@ViewBag.SearchTerm" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="ListReceptionists">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Salary</th>
+            <th>Hire Date</th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.UserName</td>
+                <td>@item.Email</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.salary.ToString("C")</td>
+                <td>@item.hiredate.ToShortDateString()</td>
+                <td>@(item.IsActive ? "Yes" : "No")</td>
+                <td>
+                    <a asp-action="UpdateReceptionist" asp-route-id="@item.resptionistid" class="btn btn-primary btn-sm">Edit</a> |
+                    <a asp-action="ReceptionistDetails" asp-route-id="@item.resptionistid" class="btn btn-info btn-sm">Details</a> |
+                    <form asp-action="RemoveReceptionist" asp-route-id="@item.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this receptionist?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagination">
+    @if (ViewBag.PageNumber > 1)
+    {
+        <a asp-action="ListReceptionists" asp-route-pageNumber="@(ViewBag.PageNumber - 1)" class="btn btn-secondary">Previous</a>
+    }
+    <span>Page @ViewBag.PageNumber</span>
+    <a asp-action="ListReceptionists" asp-route-pageNumber="@(ViewBag.PageNumber + 1)" class="btn btn-secondary">Next</a>
+</div>
