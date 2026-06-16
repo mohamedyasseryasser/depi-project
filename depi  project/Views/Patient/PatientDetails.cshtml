@@ -1,0 +1,124 @@
+@model depi__project.viewmodels.Patient.ResponsePatientVM
+
+@{
+    ViewData["Title"] = "Patient Details";
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h4 class="fw-bold mb-1">@Model.patientname</h4>
+                <span class="badge rounded-pill @(Model.isvalid ? "bg-success" : "bg-secondary")">
+                    @(Model.isvalid ? "Valid" : "Inactive")
+                </span>
+            </div>
+            <div class="btn-group">
+                <a asp-action="UpdatePatient" asp-route-id="@Model.patientid" class="btn btn-outline-warning">Edit</a>
+                <a asp-action="ListPatients" class="btn btn-outline-secondary">Back</a>
+            </div>
+        </div>
+        <hr />
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Patient ID</dt>
+            <dd class="col-sm-9">#@Model.patientid</dd>
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">@Model.phonenumber</dd>
+            <dt class="col-sm-3">Gender</dt>
+            <dd class="col-sm-9">@Model.Gender</dd>
+            <dt class="col-sm-3">Date Of Birth</dt>
+            <dd class="col-sm-9">@Model.datebirth.ToString("yyyy-MM-dd")</dd>
+            <dt class="col-sm-3">National ID</dt>
+            <dd class="col-sm-9">@(Model.nationalid?.ToString() ?? "-")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="fw-bold mb-3">Appointments</h5>
+        @if (Model.Appointments.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Doctor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var appointment in Model.Appointments)
+                        {
+                            <tr>
+                                <td>#@appointment.appoimentid</td>
+                                <td>@appointment.Appoinmentdate.ToString("yyyy-MM-dd")</td>
+                                <td>@appointment.startat.ToString("HH:mm")</td>
+                                <td>@appointment.endat.ToString("HH:mm")</td>
+                                <td>@(appointment.DoctorName ?? "-")</td>
+                                <td>@appointment.status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted mb-0">No appointments yet.</p>
+        }
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Visits</h5>
+                @if (Model.Visits.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var visit in Model.Visits)
+                        {
+                            <li class="list-group-item px-0">
+                                <div class="fw-bold">@visit.visitdate.ToString("yyyy-MM-dd") - @visit.visitstatus</div>
+                                <div class="small text-muted">@visit.diagnosis</div>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No visits yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Invoices</h5>
+                @if (Model.Invoices.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var invoice in Model.Invoices)
+                        {
+                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                <span>#@invoice.InvoiceId - @invoice.Status</span>
+                                <strong>@invoice.FinalAmount.ToString("C")</strong>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No invoices yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

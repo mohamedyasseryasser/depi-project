@@ -156,6 +156,17 @@ namespace depi__project.services.reporesity
                     response.Errors.Add(response.Message);
                     return response;
                 }
+                if (string.IsNullOrWhiteSpace(department.userid))
+                {
+                    department.userid = await Context.Users.Select(u => u.Id).FirstOrDefaultAsync();
+                    if (string.IsNullOrWhiteSpace(department.userid))
+                    {
+                        response.Success = false;
+                        response.Message = "Department must be linked to an existing user.";
+                        response.Errors.Add(response.Message);
+                        return response;
+                    }
+                }
                 await Context.AddAsync(department);
                 await Context.SaveChangesAsync();
                 response.Success = true;

@@ -11,6 +11,7 @@ namespace depi__project.mapping
             CreateMap<AddPatientVM, Patient>();
             CreateMap<Patient, ResponsePatientVM>();
             CreateMap<UpdatePatientVM, ResponsePatientVM>();
+            CreateMap<ResponsePatientVM, UpdatePatientVM>();
 
         }
     }

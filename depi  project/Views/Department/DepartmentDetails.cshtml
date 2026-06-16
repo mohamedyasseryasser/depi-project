@@ -1,0 +1,71 @@
+@model depi__project.viewmodels.departmentvm.ResponseDeptVm
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h4 class="fw-bold mb-1">@Model.Name</h4>
+                <span class="badge rounded-pill @(Model.isactive ? "bg-success" : "bg-secondary")">
+                    @(Model.isactive ? "Active" : "Inactive")
+                </span>
+            </div>
+            <div class="btn-group">
+                <a asp-action="UpdateDepartment" asp-route-id="@Model.DepartmentId" class="btn btn-outline-warning">Edit</a>
+                <a asp-action="ListDepartments" class="btn btn-outline-secondary">Back</a>
+            </div>
+        </div>
+        <hr />
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Department ID</dt>
+            <dd class="col-sm-9">#@Model.DepartmentId</dd>
+            <dt class="col-sm-3">Floor</dt>
+            <dd class="col-sm-9">@Model.FloorNumber</dd>
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+            <dt class="col-sm-3">Created At</dt>
+            <dd class="col-sm-9">@Model.createdat.ToString("yyyy-MM-dd")</dd>
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.description) ? "No description" : Model.description)</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h5 class="fw-bold mb-3">Doctors</h5>
+        @if (Model.doctors.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Specialization</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var doctor in Model.doctors)
+                        {
+                            <tr>
+                                <td>@doctor.UserName</td>
+                                <td>@doctor.Email</td>
+                                <td>@doctor.Specialization</td>
+                                <td>@doctor.status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted mb-0">No doctors assigned yet.</p>
+        }
+    </div>
+</div>

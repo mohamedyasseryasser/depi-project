@@ -21,6 +21,8 @@ namespace depi__project.mapping
                           opt => opt.Ignore()) 
                .ForMember(dest => dest.DepartmentId,
                           opt => opt.Ignore()); 
+
+            CreateMap<ResponseDeptVm, UpdateDertVm>();
         }
     }
 }
