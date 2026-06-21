@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using depi__project.Models;
 using depi__project.viewmodels.Appoinment;
 
@@ -36,7 +36,13 @@ namespace depi__project.mapping
                     opt => opt.MapFrom(src => src.Patient))
 
                 .ForMember(dest => dest.updateat,
-                    opt => opt.MapFrom(src => src.updateat ?? DateTime.Now));
+                    opt => opt.MapFrom(src => src.updateat ?? DateTime.Now))
+
+                .ForMember(dest => dest.DoctorName,
+                    opt => opt.MapFrom(src => src.Doctor != null && src.Doctor.user != null ? src.Doctor.user.UserName : string.Empty))
+
+                .ForMember(dest => dest.ReceptionistName,
+                    opt => opt.MapFrom(src => src.resptionist != null && src.resptionist.user != null ? src.resptionist.user.UserName : string.Empty));
         }
 
     }

@@ -1,0 +1,50 @@
+@model depi__project.viewmodels.Appoinment.UpdateAppoinmentStateVM
+
+@{
+    ViewData["Title"] = "Update Appointment Status";
+}
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">Update Appointment Status</h5>
+                <a asp-action="AppoinmentDetails" asp-route-id="@Model.AppoinmentId" class="btn btn-sm btn-outline-secondary">Cancel</a>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info border-0 shadow-sm mb-4">
+                    <div class="row">
+                        <div class="col-6">
+                            <span class="text-uppercase small d-block text-muted">Patient Name</span>
+                            <strong>@Model.patientname</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-uppercase small d-block text-muted">Phone Number</span>
+                            <strong>@Model.phone</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <form asp-action="SaveUpdateAppoinmentState" method="post">
+                    <input type="hidden" asp-for="AppoinmentId" />
+                    <input type="hidden" asp-for="patientname" />
+                    <input type="hidden" asp-for="phone" />
+
+                    <div class="mb-4">
+                        <label asp-for="Status" class="form-label fw-bold">Appointment Status</label>
+                        <select asp-for="Status" asp-items="Html.GetEnumSelectList<depi__project.enums.AppointmentStatus>()" class="form-select fs-5 py-2"></select>
+                        <span asp-validation-for="Status" class="text-danger small"></span>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary px-4 py-2">Update Status</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

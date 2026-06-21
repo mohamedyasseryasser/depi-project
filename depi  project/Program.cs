@@ -1,4 +1,4 @@
-﻿//using Castle.Core.Logging;
+//using Castle.Core.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using depi__project.Models;
@@ -27,6 +27,8 @@ namespace smart_clinic
             builder.Services.AddScoped<IAuth, Auth>();
             builder.Services.AddScoped<IDepartment,DepartmentRepo>();
             builder.Services.AddScoped<IPatient, PatientRepo>();
+            builder.Services.AddScoped<IAppoinment, AppoinmentRepo>();
+            builder.Services.AddScoped<IVisit, VisitRepo>();
             builder.Services.AddControllersWithViews();
             //auto mapping 
             builder.Services.AddAutoMapper(typeof(Program));

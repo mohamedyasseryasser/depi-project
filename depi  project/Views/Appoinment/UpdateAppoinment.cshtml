@@ -1,0 +1,93 @@
+@model depi__project.viewmodels.Appoinment.UpdateAppoinment
+
+@{
+    ViewData["Title"] = "Edit Appointment";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0 fw-bold text-primary">Edit Appointment #@Model.AppoinmentId</h5>
+                    <a asp-action="AppoinmentDetails" asp-route-id="@Model.AppoinmentId" class="btn btn-outline-secondary btn-sm">Cancel</a>
+                </div>
+                <hr />
+
+                <form asp-action="SaveUpdateAppoinment" method="post" class="row g-3">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="AppoinmentId" />
+
+                    <div class="col-md-6">
+                        <label asp-for="PhoneNumber" class="form-label fw-bold">Patient Phone Number</label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="doctorid" class="form-label fw-bold">Doctor</label>
+                        <select asp-for="doctorid" asp-items="ViewBag.Doctors" class="form-select">
+                            <option value="">-- Select Doctor --</option>
+                        </select>
+                        <span asp-validation-for="doctorid" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="resptionistidid" class="form-label fw-bold">Receptionist</label>
+                        <select asp-for="resptionistidid" asp-items="ViewBag.Receptionists" class="form-select">
+                            <option value="">-- Select Receptionist --</option>
+                        </select>
+                        <span asp-validation-for="resptionistidid" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="type" class="form-label fw-bold">Appointment Type</label>
+                        <select asp-for="type" asp-items="Html.GetEnumSelectList<depi__project.enums.typeofappoinment>()" class="form-select"></select>
+                        <span asp-validation-for="type" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Appoinmentdate" class="form-label fw-bold">Appointment Date</label>
+                        <input asp-for="Appoinmentdate" type="date" class="form-control" value="@Model.Appoinmentdate.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="Appoinmentdate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="startat" class="form-label fw-bold">Start Time</label>
+                        <input asp-for="startat" type="time" class="form-control" value="@Model.startat.ToString("HH:mm")" />
+                        <span asp-validation-for="startat" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="endat" class="form-label fw-bold">End Time</label>
+                        <input asp-for="endat" type="time" class="form-control" value="@Model.endat.ToString("HH:mm")" />
+                        <span asp-validation-for="endat" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="cost" class="form-label fw-bold">Consultation Cost</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input asp-for="cost" type="number" step="0.01" class="form-control" />
+                        </div>
+                        <span asp-validation-for="cost" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="notes" class="form-label fw-bold">Notes</label>
+                        <textarea asp-for="notes" rows="3" class="form-control"></textarea>
+                        <span asp-validation-for="notes" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12 text-end mt-4">
+                        <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

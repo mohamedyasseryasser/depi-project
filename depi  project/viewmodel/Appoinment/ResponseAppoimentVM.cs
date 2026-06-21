@@ -1,4 +1,4 @@
-﻿using depi__project.enums;
+using depi__project.enums;
 using depi__project.viewmodels.Patient;
 using System.ComponentModel.DataAnnotations;
 
@@ -19,5 +19,7 @@ namespace depi__project.viewmodels.Appoinment
         public decimal cost { get; set; }
         public typeofappoinment type { get; set; }
         public ResponsePatientVM? Patient { get; set; }
+        public string? DoctorName { get; set; }
+        public string? ReceptionistName { get; set; }
     }
 }
