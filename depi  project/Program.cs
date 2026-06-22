@@ -57,7 +57,7 @@ namespace smart_clinic
 
                 context.Database.Migrate();
 
-                foreach (var role in new[] { "Admin", "Doctor", "Receptionist" })
+                foreach (var role in new[] { "Admin", "Doctor", "Receptionist" }) 
                 {
                     if (!await roleManager.RoleExistsAsync(role))
                     {
