@@ -42,7 +42,10 @@ namespace depi__project.mapping
                     opt => opt.MapFrom(src => src.Doctor != null && src.Doctor.user != null ? src.Doctor.user.UserName : string.Empty))
 
                 .ForMember(dest => dest.ReceptionistName,
-                    opt => opt.MapFrom(src => src.resptionist != null && src.resptionist.user != null ? src.resptionist.user.UserName : string.Empty));
+                    opt => opt.MapFrom(src => src.resptionist != null && src.resptionist.user != null ? src.resptionist.user.UserName : string.Empty))
+
+                .ForMember(dest => dest.Visit,
+                    opt => opt.MapFrom(src => src.Visit));
         }
 
     }

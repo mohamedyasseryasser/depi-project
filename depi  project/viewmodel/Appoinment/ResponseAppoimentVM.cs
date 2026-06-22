@@ -21,5 +21,6 @@ namespace depi__project.viewmodels.Appoinment
         public ResponsePatientVM? Patient { get; set; }
         public string? DoctorName { get; set; }
         public string? ReceptionistName { get; set; }
+        public depi__project.viewmodels.Visit.ResponseVisitVM? Visit { get; set; }
     }
 }

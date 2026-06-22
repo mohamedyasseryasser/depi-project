@@ -1,4 +1,4 @@
-﻿using depi__project.enums;
+using depi__project.enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace depi__project.viewmodels.Appoinment
@@ -35,5 +35,9 @@ namespace depi__project.viewmodels.Appoinment
 
         [Required(ErrorMessage = "Doctor ID is required")]
         public int doctorid { get; set; }
+
+        [Required(ErrorMessage = "Phone number is required")]
+        [RegularExpression(@"^01[0-2,5]{1}[0-9]{8}$", ErrorMessage = "Phone number format is invalid")]
+        public string PhoneNumber { get; set; }
     }
 }
