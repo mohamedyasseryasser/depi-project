@@ -1,0 +1,158 @@
+@model depi__project.viewmodels.prescription.AddPrescriptionVM
+
+@{
+    ViewData["Title"] = "Create Prescription";
+    var medicineOptions = Model.items.FirstOrDefault()?.medicines ?? new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 fw-bold">Create Prescription</h5>
+            <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Back</a>
+        </div>
+
+        <form asp-action="Create" method="post" id="prescriptionForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label asp-for="visitid" class="form-label"></label>
+                    <select asp-for="visitid" asp-items="Model.Visits" class="form-select">
+                        <option value="">-- Select Visit --</option>
+                    </select>
+                    <span asp-validation-for="visitid" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="prescriptiondate" class="form-label"></label>
+                    <input asp-for="prescriptiondate" class="form-control" type="date" />
+                    <span asp-validation-for="prescriptiondate" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="notes" class="form-label"></label>
+                    <input asp-for="notes" class="form-control" placeholder="General prescription notes" />
+                    <span asp-validation-for="notes" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="fw-bold mb-0">Medicines</h6>
+                <button type="button" class="btn btn-sm btn-outline-primary" id="addItemBtn">+ Add Medicine Row</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle" id="itemsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="min-width:180px">Medicine</th>
+                            <th>Dosage</th>
+                            <th>Frequency</th>
+                            <th>Duration</th>
+                            <th style="width:90px">Qty</th>
+                            <th style="min-width:200px">Instructions</th>
+                            <th style="width:60px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsBody">
+                        @for (var i = 0; i < Model.items.Count; i++)
+                        {
+                            <tr class="item-row">
+                                <td>
+                                    <select asp-for="items[i].mdeicineid" asp-items="medicineOptions" class="form-select form-select-sm">
+                                        <option value="">-- Select --</option>
+                                    </select>
+                                    <span asp-validation-for="items[i].mdeicineid" class="text-danger small"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="items[i].Dosage" class="form-control form-control-sm" placeholder="e.g. 500mg" />
+                                    <span asp-validation-for="items[i].Dosage" class="text-danger small"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="items[i].Frequency" class="form-control form-control-sm" placeholder="e.g. Twice daily" />
+                                    <span asp-validation-for="items[i].Frequency" class="text-danger small"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="items[i].Duration" class="form-control form-control-sm" placeholder="e.g. 7 days" />
+                                    <span asp-validation-for="items[i].Duration" class="text-danger small"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="items[i].quantity" class="form-control form-control-sm" type="number" min="1" />
+                                    <span asp-validation-for="items[i].quantity" class="text-danger small"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="items[i].Instructions" class="form-control form-control-sm" placeholder="Take after meals" />
+                                    <span asp-validation-for="items[i].Instructions" class="text-danger small"></span>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">&times;</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-primary">Save Prescription</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<template id="itemRowTemplate">
+    <tr class="item-row">
+        <td>
+            <select class="form-select form-select-sm medicine-select" name="items[__index__].mdeicineid">
+                <option value="">-- Select --</option>
+                @foreach (var med in medicineOptions)
+                {
+                    <option value="@med.Value">@med.Text</option>
+                }
+            </select>
+        </td>
+        <td><input class="form-control form-control-sm" name="items[__index__].Dosage" placeholder="e.g. 500mg" /></td>
+        <td><input class="form-control form-control-sm" name="items[__index__].Frequency" placeholder="e.g. Twice daily" /></td>
+        <td><input class="form-control form-control-sm" name="items[__index__].Duration" placeholder="e.g. 7 days" /></td>
+        <td><input class="form-control form-control-sm" name="items[__index__].quantity" type="number" min="1" value="1" /></td>
+        <td><input class="form-control form-control-sm" name="items[__index__].Instructions" placeholder="Take after meals" /></td>
+        <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">&times;</button></td>
+    </tr>
+</template>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const itemsBody = document.getElementById('itemsBody');
+            const template = document.getElementById('itemRowTemplate').innerHTML;
+            const addBtn = document.getElementById('addItemBtn');
+
+            function reindexRows() {
+                itemsBody.querySelectorAll('.item-row').forEach((row, index) => {
+                    row.querySelectorAll('[name]').forEach(input => {
+                        input.name = input.name.replace(/items\[\d+\]/, `items[${index}]`);
+                    });
+                });
+            }
+
+            function bindRemoveButtons() {
+                itemsBody.querySelectorAll('.remove-row').forEach(btn => {
+                    btn.onclick = function () {
+                        if (itemsBody.querySelectorAll('.item-row').length > 1) {
+                            btn.closest('tr').remove();
+                            reindexRows();
+                        }
+                    };
+                });
+            }
+
+            addBtn.addEventListener('click', function () {
+                const index = itemsBody.querySelectorAll('.item-row').length;
+                itemsBody.insertAdjacentHTML('beforeend', template.replace(/__index__/g, index));
+                bindRemoveButtons();
+            });
+
+            bindRemoveButtons();
+        })();
+    </script>
+}

@@ -1,0 +1,94 @@
+@model depi__project.viewmodels.invoice.AddInvoiceVM
+
+@{
+    ViewData["Title"] = "Create Invoice";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 fw-bold">Create Invoice</h5>
+            <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Back</a>
+        </div>
+
+        <form asp-action="Create" method="post" class="row g-3" id="invoiceForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-md-6">
+                <label asp-for="VisitId" class="form-label"></label>
+                <select asp-for="VisitId" asp-items="Model.Visits" class="form-select" id="visitSelect">
+                    <option value="">-- Select Visit --</option>
+                </select>
+                <span asp-validation-for="VisitId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" asp-items="Html.GetEnumSelectList<depi__project.enums.InvoiceStatus>()" class="form-select"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="TotalAmount" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="TotalAmount" class="form-control calc-field" step="0.01" />
+                </div>
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Tax" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="Tax" class="form-control calc-field" step="0.01" />
+                </div>
+                <span asp-validation-for="Tax" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Discount" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="Discount" class="form-control calc-field" step="0.01" />
+                </div>
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <div class="alert alert-light border d-flex justify-content-between align-items-center mb-0">
+                    <span class="fw-bold">Final Amount</span>
+                    <span class="fs-4 text-primary fw-bold">$<span id="finalAmountDisplay">@Model.FinalAmount.ToString("F2")</span></span>
+                </div>
+                <input asp-for="FinalAmount" type="hidden" id="FinalAmount" />
+            </div>
+
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary">Save Invoice</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const fields = document.querySelectorAll('.calc-field');
+            const finalInput = document.getElementById('FinalAmount');
+            const finalDisplay = document.getElementById('finalAmountDisplay');
+
+            function recalculate() {
+                const total = parseFloat(document.getElementById('TotalAmount').value) || 0;
+                const tax = parseFloat(document.getElementById('Tax').value) || 0;
+                const discount = parseFloat(document.getElementById('Discount').value) || 0;
+                const finalAmount = Math.max(0, Math.round((total + tax - discount) * 100) / 100);
+                finalInput.value = finalAmount.toFixed(2);
+                finalDisplay.textContent = finalAmount.toFixed(2);
+            }
+
+            fields.forEach(field => field.addEventListener('input', recalculate));
+            recalculate();
+        })();
+    </script>
+}

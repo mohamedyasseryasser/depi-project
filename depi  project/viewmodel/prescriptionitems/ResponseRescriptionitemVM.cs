@@ -1,5 +1,4 @@
-﻿using depi__project.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace depi__project.viewmodels.prescriptionitems
 {
@@ -7,12 +6,17 @@ namespace depi__project.viewmodels.prescriptionitems
     {
         public int prescriptionitemid { get; set; }
         public int quantity { get; set; }
-        public string Dosage { get; set; }
-        public string Frequency { get; set; }
-        public string Duration { get; set; }
-        public string notes { get; set; }
-         public int prescriptionid { get; set; }
+        public string Dosage { get; set; } = string.Empty;
+        public string Frequency { get; set; } = string.Empty;
+        public string Duration { get; set; } = string.Empty;
+
+        [Display(Name = "Instructions")]
+        public string Instructions { get; set; } = string.Empty;
+
+        public int prescriptionid { get; set; }
         public int mdeicineid { get; set; }
-        public string Name {  get; set; }
+
+        [Display(Name = "Medicine")]
+        public string Name { get; set; } = string.Empty;
     }
 }

@@ -1,0 +1,46 @@
+@model depi__project.viewmodels.invoice.ResponseInvoiceVM
+
+@{
+    ViewData["Title"] = "Invoice Details";
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h4 class="fw-bold mb-1">Invoice #@Model.InvoiceId</h4>
+                <span class="badge rounded-pill @(Model.Status == depi__project.enums.InvoiceStatus.Paid ? "bg-success" : Model.Status == depi__project.enums.InvoiceStatus.Cancelled ? "bg-secondary" : "bg-warning text-dark")">
+                    @Model.Status
+                </span>
+            </div>
+            <div class="btn-group">
+                <a asp-action="Edit" asp-route-id="@Model.InvoiceId" class="btn btn-outline-warning">Edit</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+            </div>
+        </div>
+        <hr />
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Visit</dt>
+            <dd class="col-sm-9">
+                <a asp-controller="Visit" asp-action="VisitDetails" asp-route-id="@Model.VisitId">Visit #@Model.VisitId</a>
+                <span class="text-muted">(@Model.VisitDate.ToString("yyyy-MM-dd"))</span>
+            </dd>
+            <dt class="col-sm-3">Patient</dt>
+            <dd class="col-sm-9">@Model.PatientName <span class="text-muted">(@Model.PatientPhone)</span></dd>
+            <dt class="col-sm-3">Doctor</dt>
+            <dd class="col-sm-9">@Model.DoctorName</dd>
+            <dt class="col-sm-3">Appointment</dt>
+            <dd class="col-sm-9">#@(Model.AppointmentId?.ToString() ?? "N/A")</dd>
+            <dt class="col-sm-3">Total Amount</dt>
+            <dd class="col-sm-9">$@Model.TotalAmount.ToString("F2")</dd>
+            <dt class="col-sm-3">Tax</dt>
+            <dd class="col-sm-9">$@Model.Tax.ToString("F2")</dd>
+            <dt class="col-sm-3">Discount</dt>
+            <dd class="col-sm-9">$@Model.Discount.ToString("F2")</dd>
+            <dt class="col-sm-3">Final Amount</dt>
+            <dd class="col-sm-9"><strong class="text-primary fs-5">$@Model.FinalAmount.ToString("F2")</strong></dd>
+            <dt class="col-sm-3">Created At</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+        </dl>
+    </div>
+</div>

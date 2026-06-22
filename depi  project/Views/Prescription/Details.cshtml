@@ -1,0 +1,77 @@
+@model depi__project.viewmodels.prescription.ResponsePrescriptionVM
+
+@{
+    ViewData["Title"] = "Prescription Details";
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h4 class="fw-bold mb-1">Prescription #@Model.prescriptionid</h4>
+                <p class="text-muted mb-0">@Model.prescriptiondate.ToString("yyyy-MM-dd")</p>
+            </div>
+            <div class="btn-group">
+                <a asp-action="Edit" asp-route-id="@Model.prescriptionid" class="btn btn-outline-warning">Edit</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+            </div>
+        </div>
+        <hr />
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Visit</dt>
+            <dd class="col-sm-9">
+                <a asp-controller="Visit" asp-action="VisitDetails" asp-route-id="@Model.visitid">Visit #@Model.visitid</a>
+                @if (Model.VisitDate.HasValue)
+                {
+                    <span class="text-muted">(@Model.VisitDate.Value.ToString("yyyy-MM-dd"))</span>
+                }
+            </dd>
+            <dt class="col-sm-3">Patient</dt>
+            <dd class="col-sm-9">@Model.patientname <span class="text-muted">(@Model.phonenumber)</span></dd>
+            <dt class="col-sm-3">Doctor</dt>
+            <dd class="col-sm-9">@Model.DoctorName</dd>
+            <dt class="col-sm-3">Notes</dt>
+            <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.notes) ? "—" : Model.notes)</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h5 class="fw-bold mb-3">Prescription Items</h5>
+        @if (Model.prescriptionitems.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Medicine</th>
+                            <th>Dosage</th>
+                            <th>Frequency</th>
+                            <th>Duration</th>
+                            <th>Qty</th>
+                            <th>Instructions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.prescriptionitems)
+                        {
+                            <tr>
+                                <td class="fw-bold">@item.Name</td>
+                                <td>@item.Dosage</td>
+                                <td>@item.Frequency</td>
+                                <td>@item.Duration</td>
+                                <td>@item.quantity</td>
+                                <td>@item.Instructions</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted mb-0">No items recorded.</p>
+        }
+    </div>
+</div>
