@@ -1,0 +1,168 @@
+@model IEnumerable<depi__project.viewmodels.medicine.ResponseMedicineVM>
+
+@{
+    ViewData["Title"] = "Medicines";
+}
+
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="mb-0 fw-bold">Search Medicines</h5>
+            </div>
+            <div class="col-auto">
+                <a asp-action="AddMedicine" class="btn btn-primary">Add New Medicine</a>
+            </div>
+        </div>
+        <hr />
+        <form asp-action="ListMedicines" method="get" class="row g-2">
+            <div class="col-md-3">
+                <input type="text" name="name" class="form-control"
+                       placeholder="Medicine name" value="@ViewBag.Name" />
+            </div>
+            <div class="col-md-3">
+                <select name="cat_id" class="form-select">
+                    <option value="">All categories</option>
+                            @foreach (var cat in ViewBag.Categories)
+                            {
+                            <option value="@cat.Value"
+                                    selected="@(ViewBag.CatId?.ToString() == cat.Value)">
+                                    @cat.Text
+                            </option>
+                            }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="isDeleted" class="form-select">
+                    <option value="">All Statues</option>
+                    <option value="false" selected="@(ViewBag.IsDeleted?.ToString() == "False")">Active</option>
+                    <option value="true"  selected="@(ViewBag.IsDeleted?.ToString() == "True")">Deleted</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary w-100">Search</button>
+            </div>
+            <div class="col-md-2">
+                <a asp-action="ListMedicines" class="btn btn-outline-secondary w-100">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Unit Price</th>
+                        <th>Expiry Date</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5 text-muted">No medicines found.</td>
+                        </tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 text-muted">#@item.medicineId</td>
+                            <td class="fw-bold">@item.Name</td>
+                            <td>
+                                <span class="badge rounded-pill bg-info bg-opacity-10 text-info">
+                                    @item.CategoryName
+                                </span>
+                            </td>
+                            <td>
+                                @if (item.StockQuantity <= item.RecordLevel)
+                                {
+                                    <span class="text-danger fw-semibold">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>@item.StockQuantity
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-success fw-semibold">@item.StockQuantity</span>
+                                }
+                            </td>
+                            <td>@item.UnitPrice.ToString("F2") EGP</td>
+                            <td>
+                                @if (item.ExpiryDate < DateTime.Now)
+                                {
+                                    <span class="text-danger small">
+                                        <i class="bi bi-exclamation-circle me-1"></i>@item.ExpiryDate.ToString("yyyy-MM-dd")
+                                    </span>
+                                }
+                                else
+                                {
+                                    @item.ExpiryDate.ToString("yyyy-MM-dd")
+                                }
+                            </td>
+                            <td>
+                                <span style="width:80px" class="badge rounded-pill d-inline-block text-center @(!item.IsDeleted ? "bg-success" : "bg-danger")">
+                                    @(!item.IsDeleted ? "Active" : "Deleted")
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    @if (!item.IsDeleted)
+                                    {
+                                        <a asp-action="UpdateMedicine" asp-route-id="@item.medicineId"
+                                           class="btn btn-sm btn-outline-warning">Edit</a>
+                                    }
+                                    <a asp-action="MedicineDetails" asp-route-id="@item.medicineId"
+                                       class="btn btn-sm btn-outline-info">Details</a>
+                                    <form asp-action="RemoveMedicine" method="post" class="d-inline"
+                                          onsubmit="return confirm('Are you sure?');">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.medicineId" />
+                                        <button type="submit" style="width:70px"
+                                                class="btn btn-sm @(!item.IsDeleted ? "btn-outline-danger" : "btn-outline-success")">
+                                            @(!item.IsDeleted ? "Delete" : "Restore")
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer bg-white py-3">
+        @{
+            var prevDisabled = (ViewBag.PageNumber <= 1) ? "disabled" : "";
+            var nextDisabled = (!Model.Any() || Model.Count() < ViewBag.PageSize) ? "disabled" : "";
+        }
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm justify-content-center mb-0">
+                <li class="page-item @prevDisabled">
+                    <a class="page-link" asp-action="ListMedicines"
+                       asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
+                       asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-name="@ViewBag.Name"
+                       asp-route-cat_id="@ViewBag.CatId">Previous</a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Page @ViewBag.PageNumber</span>
+                </li>
+                <li class="page-item @nextDisabled">
+                    <a class="page-link" asp-action="ListMedicines"
+                       asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
+                       asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-name="@ViewBag.Name"
+                       asp-route-cat_id="@ViewBag.CatId">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

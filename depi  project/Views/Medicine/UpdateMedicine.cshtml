@@ -1,0 +1,80 @@
+@model depi__project.viewmodels.medicine.UpdateMedicineVM
+
+@{
+    ViewData["Title"] = "Update Medicine";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 fw-bold">Update Medicine</h5>
+            <a asp-action="MedicineDetails" asp-route-id="@Model.medicineId"
+               class="btn btn-outline-secondary btn-sm">Back</a>
+        </div>
+
+        <form asp-action="SaveUpdateMedicine" method="post" class="row g-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="medicineId" type="hidden" />
+            <input asp-for="user_id"    type="hidden" />
+
+            <div class="col-md-6">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="SupplierName" class="form-label"></label>
+                <input asp-for="SupplierName" class="form-control" />
+                <span asp-validation-for="SupplierName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="StockQuantity" class="form-label"></label>
+                <input asp-for="StockQuantity" type="number" class="form-control" />
+                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="RecordLevel" class="form-label"></label>
+                <input asp-for="RecordLevel" type="number" class="form-control" />
+                <span asp-validation-for="RecordLevel" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="UnitPrice" class="form-label"></label>
+                <input asp-for="UnitPrice" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="UnitPrice" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="ExpiryDate" class="form-label"></label>
+                <input asp-for="ExpiryDate" type="date" class="form-control" />
+                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="cat_id" class="form-label">Category</label>
+                <select asp-for="cat_id" asp-items="Model.Categories" class="form-select">
+                    <option value="">-- Select Category --</option>
+                </select>
+                <span asp-validation-for="cat_id" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <div class="form-check">
+                    <input asp-for="IsDeleted" class="form-check-input" />
+                    <label asp-for="IsDeleted" class="form-check-label">Mark as Deleted</label>
+                </div>
+            </div>
+
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

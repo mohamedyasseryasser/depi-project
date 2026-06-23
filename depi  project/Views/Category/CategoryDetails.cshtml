@@ -1,0 +1,39 @@
+@model depi__project.viewmodels.category.ResponseCategoryVM
+
+@{
+    ViewData["Title"] = "Category Details";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h4 class="fw-bold mb-1">@Model.cat_name</h4>
+                <span class="badge rounded-pill @(Model.isactive ? "bg-success" : "bg-secondary")">
+                    @(Model.isactive ? "Active" : "Inactive")
+                </span>
+            </div>
+            <div class="btn-group">
+                @if (Model.isactive)
+                {
+                    <a asp-action="UpdateCategory" asp-route-id="@Model.cat_id"
+                       class="btn btn-outline-warning">Edit</a>
+                }
+                <a asp-action="ListCategories" class="btn btn-outline-secondary">Back</a>
+            </div>
+        </div>
+        <hr />
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Category ID</dt>
+            <dd class="col-sm-9">#@Model.cat_id</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">
+                @(string.IsNullOrWhiteSpace(Model.cat_description) ? "No description" : Model.cat_description)
+            </dd>
+
+            <dt class="col-sm-3">Added By</dt>
+            <dd class="col-sm-9">@(Model.AddedBy ?? "-")</dd>
+        </dl>
+    </div>
+</div>

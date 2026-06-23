@@ -1,0 +1,48 @@
+@model depi__project.viewmodels.category.UpdateCategoryVM
+
+@{
+    ViewData["Title"] = "Update Category";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 fw-bold">Update Category</h5>
+            <a asp-action="CategoryDetails" asp-route-id="@Model.cat_id"
+               class="btn btn-outline-secondary btn-sm">Back</a>
+        </div>
+
+        <form asp-action="SaveUpdateCategory" method="post" class="row g-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="cat_id"  type="hidden" />
+            <input asp-for="user_id" type="hidden" />
+
+            <div class="col-md-6">
+                <label asp-for="cat_name" class="form-label">Category Name</label>
+                <input asp-for="cat_name" class="form-control" />
+                <span asp-validation-for="cat_name" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="cat_description" class="form-label">Description</label>
+                <textarea asp-for="cat_description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="cat_description" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <div class="form-check">
+                    <input asp-for="isactive" class="form-check-input" />
+                    <label asp-for="isactive" class="form-check-label">Active</label>
+                </div>
+            </div>
+
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,131 @@
+@model IEnumerable<depi__project.viewmodels.category.ResponseCategoryVM>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="mb-0 fw-bold">Search Categories</h5>
+            </div>
+            <div class="col-auto">
+                <a asp-action="AddCategory" class="btn btn-primary">Add New Category</a>
+            </div>
+        </div>
+        <hr />
+        <form asp-action="ListCategories" method="get" class="row g-3">
+            <div class="col-md-5">
+                <input type="text" name="name" class="form-control"
+                       placeholder="Category name" value="@ViewBag.Name" />
+            </div>
+            <div class="col-md-4">
+                <select name="isactive" class="form-select">
+                    <option value="">All statuses</option>
+                    <option value="true"  selected="@(ViewBag.IsActive == true)">Active</option>
+                    <option value="false" selected="@(ViewBag.IsActive == false)">Inactive</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <div class="btn-group w-100">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                    <a asp-action="ListCategories" class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Added By</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">No categories found.</td>
+                        </tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 text-muted">#@item.cat_id</td>
+                            <td class="fw-bold">@item.cat_name</td>
+                            <td class="text-muted small">@item.cat_description</td>
+                            <td>@(item.AddedBy ?? "-")</td>
+                            <td>
+                                <span  style="width:80px" class="badge rounded-pill d-inline-block text-center @(item.isactive ? "bg-success" : "bg-secondary")">
+                                    @(item.isactive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    @if (item.isactive)
+                                    {
+                                        <a asp-action="UpdateCategory" asp-route-id="@item.cat_id"
+                                           class="btn btn-sm btn-outline-warning">Edit</a>
+                                    }
+                                    <a asp-action="CategoryDetails" asp-route-id="@item.cat_id"
+                                       class="btn btn-sm btn-outline-info">Details</a>
+                                    <form asp-action="RemoveCategory" method="post" class="d-inline-block" style="width: 100px;"
+                                          onsubmit="return confirm('@(item.isactive ? "Deactivate this category?" : "Activate this category?")');">
+                                          @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.cat_id" />
+
+                                        @if (item.isactive)
+                                        {
+                                           <button type="submit" class="btn btn-sm btn-outline-danger w-100">Deactivate</button>
+                                        }
+                                        else
+                                        {
+                                           <button type="submit" class="btn btn-sm btn-outline-success w-100">Activate</button>
+                                        }
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer bg-white py-3">
+        @{
+            var prevDisabled = (ViewBag.PageNumber <= 1) ? "disabled" : "";
+            var nextDisabled = (!Model.Any() || Model.Count() < ViewBag.PageSize) ? "disabled" : "";
+        }
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm justify-content-center mb-0">
+                <li class="page-item @prevDisabled">
+                    <a class="page-link" asp-action="ListCategories"
+                       asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
+                       asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-name="@ViewBag.Name"
+                       asp-route-isactive="@ViewBag.IsActive">Previous</a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Page @ViewBag.PageNumber</span>
+                </li>
+                <li class="page-item @nextDisabled">
+                    <a class="page-link" asp-action="ListCategories"
+                       asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
+                       asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-name="@ViewBag.Name"
+                       asp-route-isactive="@ViewBag.IsActive">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
