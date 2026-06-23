@@ -32,6 +32,8 @@ namespace smart_clinic
             builder.Services.AddScoped<IVisit, VisitRepo>();
             builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
             builder.Services.AddControllersWithViews();
             //auto mapping (AutoMapper 16+ — built-in DI, no separate Extensions package)
             builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
