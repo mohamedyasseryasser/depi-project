@@ -12,7 +12,7 @@ namespace depi__project.viewmodels.prescriptionitems
         [Required(ErrorMessage = "Quantity is required")]
         [Range(1, 1000, ErrorMessage = "Quantity must be between 1 and 1000")]
         [Display(Name = "Quantity")]
-        public int quantity { get; set; }
+        public int quantity { get; set; } = 1;
 
         [Required(ErrorMessage = "Dosage is required")]
         [StringLength(100, ErrorMessage = "Dosage cannot exceed 100 characters")]

@@ -16,6 +16,7 @@ namespace depi__project.viewmodels.prescription
         public string? notes { get; set; }
 
         [Required(ErrorMessage = "Visit is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a visit")]
         [Display(Name = "Visit")]
         public int visitid { get; set; }
 

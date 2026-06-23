@@ -1,6 +1,7 @@
 //using Castle.Core.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using depi__project.Data;
 using depi__project.Models;
 using depi__project.services.interfaces;
 using depi__project.services.reporesity;
@@ -32,8 +33,8 @@ namespace smart_clinic
             builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
             builder.Services.AddControllersWithViews();
-            //auto mapping 
-            builder.Services.AddAutoMapper(typeof(Program));
+            //auto mapping (AutoMapper 16+ — built-in DI, no separate Extensions package)
+            builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Auth/Login";
@@ -90,6 +91,11 @@ namespace smart_clinic
                         });
                         await context.SaveChangesAsync();
                     }
+                }
+
+                if (app.Environment.IsDevelopment())
+                {
+                    await DevDataSeeder.SeedAsync(context, userManager);
                 }
             }
             // Configure the HTTP request pipeline.

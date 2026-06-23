@@ -13,7 +13,23 @@
         </div>
 
         <form asp-action="Create" method="post" id="prescriptionForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            @if (!Model.Visits.Any())
+            {
+                <div class="alert alert-warning">
+                    No visits available for a new prescription. Add a visit first from
+                    <a asp-controller="Visit" asp-action="AddVisit">Visits → Add Visit</a>,
+                    or use a visit that does not already have a prescription.
+                </div>
+            }
+
+            @if (!medicineOptions.Any())
+            {
+                <div class="alert alert-warning">
+                    No medicines found in the system. Ask your teammate to add medicines first.
+                </div>
+            }
 
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
@@ -93,7 +109,7 @@
             </div>
 
             <div class="text-end mt-3">
-                <button type="submit" class="btn btn-primary">Save Prescription</button>
+                <button type="submit" class="btn btn-primary" @(Model.Visits.Any() && medicineOptions.Any() ? null : "disabled")>Save Prescription</button>
             </div>
         </form>
     </div>
