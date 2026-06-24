@@ -3,117 +3,436 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - depi__project</title>
+    <title>@ViewData["Title"] - Smart Clinic</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/depi__project.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ── Sidebar ─────────────────────────────────────────── */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 220px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e8edf3;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            padding: 20px 20px 10px;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .sidebar-brand .brand-icon {
+            width: 36px; height: 36px;
+            background: #1a73e8;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar-brand h6 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 0;
+        }
+
+        .sidebar-brand small {
+            font-size: 10px;
+            color: #8a94a6;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav .nav-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #b0b8c4;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 8px 10px 4px;
+        }
+
+        .sidebar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: #5a6478;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.18s;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-nav .nav-link i {
+            width: 18px;
+            text-align: center;
+            font-size: 14px;
+            color: #9aa3b2;
+            transition: color 0.18s;
+        }
+
+        .sidebar-nav .nav-link:hover {
+            background: #f0f5ff;
+            color: #1a73e8;
+        }
+
+        .sidebar-nav .nav-link:hover i {
+            color: #1a73e8;
+        }
+
+        .sidebar-nav .nav-link.active {
+            background: #e8f0fe;
+            color: #1a73e8;
+            font-weight: 600;
+        }
+
+        .sidebar-nav .nav-link.active i {
+            color: #1a73e8;
+        }
+
+        .sidebar-footer {
+            padding: 14px 16px;
+            border-top: 1px solid #f0f2f5;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-footer .avatar {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer .user-info h6 {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin: 0;
+        }
+
+        .sidebar-footer .user-info small {
+            font-size: 11px;
+            color: #8a94a6;
+        }
+
+        /* ── Top Navbar ───────────────────────────────────────── */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 220px;
+            right: 0;
+            height: 60px;
+            background: #ffffff;
+            border-bottom: 1px solid #e8edf3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 999;
+        }
+
+        .top-navbar .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f4f6fb;
+            border: 1px solid #e8edf3;
+            border-radius: 8px;
+            padding: 7px 14px;
+            width: 300px;
+        }
+
+        .top-navbar .search-box i {
+            color: #9aa3b2;
+            font-size: 13px;
+        }
+
+        .top-navbar .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 13px;
+            color: #3d4557;
+            width: 100%;
+        }
+
+        .top-navbar .search-box input::placeholder {
+            color: #b0b8c4;
+        }
+
+        .top-navbar .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .top-navbar .nav-actions .icon-btn {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            border: 1px solid #e8edf3;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a6478;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-decoration: none;
+        }
+
+        .top-navbar .nav-actions .icon-btn:hover {
+            background: #f0f5ff;
+            border-color: #1a73e8;
+            color: #1a73e8;
+        }
+
+        .top-navbar .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: background 0.18s;
+            text-decoration: none;
+        }
+
+        .top-navbar .admin-profile:hover {
+            background: #f4f6fb;
+        }
+
+        .top-navbar .admin-profile span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .top-navbar .admin-profile .avatar-sm {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ── Main Content ─────────────────────────────────────── */
+        .main-content {
+            margin-left: 220px;
+            margin-top: 60px;
+            padding: 28px;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* ── Toast Alerts ─────────────────────────────────────── */
+        #toast-container {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            min-width: 350px;
+        }
+
+        .custom-alert {
+            border-radius: 10px;
+        }
+
+        /* ── Responsive ───────────────────────────────────────── */
+        @@media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar.open { transform: translateX(0); }
+            .top-navbar { left: 0; }
+            .main-content { margin-left: 0; }
+            .top-navbar .search-box { width: 160px; }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">depi__project</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="ListDepartments">Departments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Patient" asp-action="ListPatients">Patients</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Appoinment" asp-action="ListAppoinments">Appointments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Visit" asp-action="ListVisits">Visits</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Prescription" asp-action="Index">Prescriptions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Invoice" asp-action="Index">Invoices</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="ListCategories">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                             <a class="nav-link text-dark" asp-area="" asp-controller="Medicine" asp-action="ListMedicines">Medicines</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+
+    <!-- ── Sidebar ──────────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class="fas fa-clinic-medical"></i></div>
+            <h6>Smart Clinic</h6>
+            <small>EMR Dashboard</small>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
+               asp-controller="Home" asp-action="Index">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
+               asp-controller="Patient" asp-action="ListPatients">
+                <i class="fas fa-users"></i> Patients
+            </a>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Department" ? "active" : "")"
+               asp-controller="Department" asp-action="ListDepartments">
+                <i class="fas fa-building"></i> Departments
+            </a>
+
+            <div class="nav-label mt-2">Clinical</div>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appoinment" ? "active" : "")"
+               asp-controller="Appoinment" asp-action="ListAppoinments">
+                <i class="fas fa-calendar-check"></i> Appointments
+            </a>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Visit" ? "active" : "")"
+               asp-controller="Visit" asp-action="ListVisits">
+                <i class="fas fa-stethoscope"></i> Visits
+            </a>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Prescription" ? "active" : "")"
+               asp-controller="Prescription" asp-action="Index">
+                <i class="fas fa-file-prescription"></i> Prescriptions
+            </a>
+
+            <div class="nav-label mt-2">Pharmacy</div>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
+               asp-controller="Category" asp-action="ListCategories">
+                <i class="fas fa-tags"></i> Categories
+            </a>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Medicine" ? "active" : "")"
+               asp-controller="Medicine" asp-action="ListMedicines">
+                <i class="fas fa-pills"></i> Medicines
+            </a>
+
+            <div class="nav-label mt-2">Billing</div>
+
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Invoice" ? "active" : "")"
+               asp-controller="Invoice" asp-action="Index">
+                <i class="fas fa-file-invoice-dollar"></i> Invoices
+            </a>
         </nav>
+
+        <div class="sidebar-footer">
+            <div class="avatar">
+                @{ var userName = User.Identity?.Name; }
+                @(string.IsNullOrEmpty(userName) ? "A" : userName[0].ToString().ToUpper())
+            </div>
+            <div class="user-info">
+                <h6>@(User.Identity?.Name ?? "Admin")</h6>
+                <small>System Manager</small>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Top Navbar ────────────────────────────────────────────── -->
+    <header class="top-navbar">
+        <div class="d-flex align-items-center gap-3">
+            <!-- Mobile toggle -->
+            <button class="icon-btn d-md-none border-0 bg-transparent" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search patients by name, ID or phone..." />
+            </div>
+        </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            <div id="toast-container" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 9999; min-width: 350px;">
-                    @if (TempData["SuccessMessage"] != null)
-                    {
-                        <div class="card shadow-lg border-0 mb-2 custom-alert animate-fade" style="border-left: 5px solid #198754 !important; background-color: #ffffff;">
-                            <div class="card-body p-3 d-flex align-items-center">
-                                <i class="fas fa-check-circle me-3 fs-5" style="color: #198754;"></i>
-                                <div class="fw-semibold text-dark">@TempData["SuccessMessage"]</div>
-                            </div>
-                        </div>
-                    }
 
-                    @if (TempData["ErrorMessage"] != null)
-                    {
-                        <div class="card shadow-lg border-0 mb-2 custom-alert animate-fade" style="border-left: 5px solid #dc3545 !important; background-color: #ffffff;">
-                            <div class="card-body p-3 d-flex align-items-center">
-                                <i class="fas fa-times-circle me-3 fs-5" style="color: #dc3545;"></i>
-                                <div class="fw-semibold text-dark">@TempData["ErrorMessage"]</div>
-                            </div>
-                        </div>
-                    }
+    <!-- ── Main Content ──────────────────────────────────────────── -->
+    <div class="main-content">
+
+        <!-- Toast Alerts -->
+        <div id="toast-container">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="card shadow-lg border-0 mb-2 custom-alert animate-fade"
+                     style="border-left: 5px solid #198754 !important; background:#fff;">
+                    <div class="card-body p-3 d-flex align-items-center">
+                        <i class="fas fa-check-circle me-3 fs-5" style="color:#198754;"></i>
+                        <div class="fw-semibold text-dark">@TempData["SuccessMessage"]</div>
+                    </div>
                 </div>
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        var alerts = document.querySelectorAll('.custom-alert');
-                        alerts.forEach(function (alert) {
-                            alert.style.opacity = "0";
-                            alert.style.transform = "translateY(-15px)";
-                            alert.style.transition = "all 0.5s ease-out";
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="card shadow-lg border-0 mb-2 custom-alert animate-fade"
+                     style="border-left: 5px solid #dc3545 !important; background:#fff;">
+                    <div class="card-body p-3 d-flex align-items-center">
+                        <i class="fas fa-times-circle me-3 fs-5" style="color:#dc3545;"></i>
+                        <div class="fw-semibold text-dark">@TempData["ErrorMessage"]</div>
+                    </div>
+                </div>
+            }
+        </div>
 
-                            setTimeout(function() {
-                                alert.style.opacity = "1";
-                                alert.style.transform = "translateY(0)";
-                            }, 50);
-
-                            setTimeout(function () {
-                                alert.style.transition = "all 0.4s ease-in";
-                                alert.style.opacity = "0";
-                                alert.style.transform = "translateY(-15px)";
-                                setTimeout(function () {
-                                    alert.remove();
-                                }, 400);
-                            }, 3000);
-                        });
-                    });
-                </script>
-            @RenderBody()
-        </main>
+        @RenderBody()
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - depi__project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Toast auto-hide
+        document.addEventListener("DOMContentLoaded", function () {
+            var alerts = document.querySelectorAll('.custom-alert');
+            alerts.forEach(function (alert) {
+                alert.style.opacity = "0";
+                alert.style.transform = "translateY(-15px)";
+                alert.style.transition = "all 0.5s ease-out";
+                setTimeout(function () {
+                    alert.style.opacity = "1";
+                    alert.style.transform = "translateY(0)";
+                }, 50);
+                setTimeout(function () {
+                    alert.style.transition = "all 0.4s ease-in";
+                    alert.style.opacity = "0";
+                    alert.style.transform = "translateY(-15px)";
+                    setTimeout(function () { alert.remove(); }, 400);
+                }, 3000);
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
