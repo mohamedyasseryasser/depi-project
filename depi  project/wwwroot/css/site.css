@@ -8,7 +8,11 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -19,4 +23,134 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.bg-primary-subtle {
+  background-color: #eaf2ff !important;
+}
+
+.bg-success-subtle {
+  background-color: #e9f8ef !important;
+}
+
+.bg-info-subtle {
+  background-color: #e7f7fb !important;
+}
+
+.bg-warning-subtle {
+  background-color: #fff4d8 !important;
+}
+
+.border-primary-subtle {
+  border-color: #bfd7ff !important;
+}
+
+.metric-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 48px;
+  font-size: 18px;
+}
+
+.metric-value {
+  color: #101828;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.dashboard-bars {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+  min-height: 260px;
+}
+
+.dashboard-bar-item {
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  gap: 6px;
+  min-width: 0;
+  text-align: center;
+}
+
+.dashboard-bar-track {
+  height: 185px;
+  border-bottom: 1px solid #d8e0ea;
+  border-radius: 8px 8px 0 0;
+  background:
+    linear-gradient(#eef2f7 1px, transparent 1px) 0 33% / 100% 33%,
+    linear-gradient(#eef2f7 1px, transparent 1px) 0 66% / 100% 33%,
+    #fbfcff;
+  display: flex;
+  align-items: end;
+  overflow: hidden;
+}
+
+.dashboard-bar {
+  width: 100%;
+  min-height: 4px;
+  border-radius: 8px 8px 0 0;
+}
+
+.dashboard-bar-item strong {
+  color: #101828;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.dashboard-bar-item small {
+  color: #667085;
+  font-size: 11px;
+}
+
+.progress-sm {
+  height: 8px;
+}
+
+.status-row {
+  margin-bottom: 16px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.avatar-initial {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 34px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quick-action-list .list-group-item:first-child {
+  border-top: 0;
+}
+
+@media (max-width: 576px) {
+  .dashboard-bars {
+    gap: 6px;
+  }
+
+  .dashboard-bar-track {
+    height: 150px;
+  }
+
+  .metric-value {
+    font-size: 26px;
+  }
 }

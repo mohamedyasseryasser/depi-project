@@ -1,7 +1,6 @@
 //using Castle.Core.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using depi__project.Data;
 using depi__project.Models;
 using depi__project.services.interfaces;
 using depi__project.services.reporesity;
@@ -68,9 +67,10 @@ namespace smart_clinic
                     }
                 }
 
-                if (!await userManager.Users.AnyAsync())
+                var adminUser = await userManager.FindByNameAsync("admin");
+                if (adminUser == null)
                 {
-                    var adminUser = new Aplicationuser
+                    adminUser = new Aplicationuser
                     {
                         UserName = "admin",
                         Email = "admin@clinic.local",
@@ -82,23 +82,36 @@ namespace smart_clinic
                     };
 
                     var createResult = await userManager.CreateAsync(adminUser, "Admin@123");
-                    if (createResult.Succeeded)
+                    if (!createResult.Succeeded)
                     {
-                        await userManager.AddToRoleAsync(adminUser, "Admin");
-                        context.Admins.Add(new Admin
-                        {
-                            userid = adminUser.Id,
-                            permissions = "full",
-                            status = depi__project.enums.userstatus.active
-                        });
-                        await context.SaveChangesAsync();
+                        throw new InvalidOperationException("Could not create the default admin user.");
                     }
                 }
 
-                if (app.Environment.IsDevelopment())
+                adminUser.Email = "admin@clinic.local";
+                adminUser.PhoneNumber = "01012345678";
+                adminUser.address = "Cairo Clinic";
+                adminUser.Gender = depi__project.enums.Gender.Male;
+                adminUser.IsActive = true;
+                adminUser.EmailConfirmed = true;
+                await userManager.UpdateAsync(adminUser);
+
+                if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
                 {
-                    await DevDataSeeder.SeedAsync(context, userManager);
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
+
+                if (!await context.Admins.AnyAsync(a => a.userid == adminUser.Id))
+                {
+                    context.Admins.Add(new Admin
+                    {
+                        userid = adminUser.Id,
+                        permissions = "full",
+                        status = depi__project.enums.userstatus.active
+                    });
+                    await context.SaveChangesAsync();
+                }
+
             }
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

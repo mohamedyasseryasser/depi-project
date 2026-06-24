@@ -306,51 +306,99 @@
                 <i class="fas fa-th-large"></i> Dashboard
             </a>
 
-            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
-               asp-controller="Patient" asp-action="ListPatients">
-                <i class="fas fa-users"></i> Patients
-            </a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")"
+                   asp-controller="User" asp-action="ListDoctors">
+                    <i class="fas fa-user-md"></i> Staff
+                </a>
 
-            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Department" ? "active" : "")"
-               asp-controller="Department" asp-action="ListDepartments">
-                <i class="fas fa-building"></i> Departments
-            </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Department" ? "active" : "")"
+                   asp-controller="Department" asp-action="ListDepartments">
+                    <i class="fas fa-building"></i> Departments
+                </a>
 
-            <div class="nav-label mt-2">Clinical</div>
+                <div class="nav-label mt-2">Operations</div>
 
-            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appoinment" ? "active" : "")"
-               asp-controller="Appoinment" asp-action="ListAppoinments">
-                <i class="fas fa-calendar-check"></i> Appointments
-            </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
+                   asp-controller="Patient" asp-action="ListPatients">
+                    <i class="fas fa-users"></i> Patients
+                </a>
 
-            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Visit" ? "active" : "")"
-               asp-controller="Visit" asp-action="ListVisits">
-                <i class="fas fa-stethoscope"></i> Visits
-            </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appoinment" ? "active" : "")"
+                   asp-controller="Appoinment" asp-action="ListAppoinments">
+                    <i class="fas fa-calendar-check"></i> Appointments
+                </a>
 
-            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Prescription" ? "active" : "")"
-               asp-controller="Prescription" asp-action="Index">
-                <i class="fas fa-file-prescription"></i> Prescriptions
-            </a>
+                <div class="nav-label mt-2">Pharmacy</div>
 
-            <div class="nav-label mt-2">Pharmacy</div>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
+                   asp-controller="Category" asp-action="ListCategories">
+                    <i class="fas fa-tags"></i> Categories
+                </a>
 
-            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
-               asp-controller="Category" asp-action="ListCategories">
-                <i class="fas fa-tags"></i> Categories
-            </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Medicine" ? "active" : "")"
+                   asp-controller="Medicine" asp-action="ListMedicines">
+                    <i class="fas fa-pills"></i> Medicines
+                </a>
 
-            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Medicine" ? "active" : "")"
-               asp-controller="Medicine" asp-action="ListMedicines">
-                <i class="fas fa-pills"></i> Medicines
-            </a>
+                <div class="nav-label mt-2">Billing</div>
 
-            <div class="nav-label mt-2">Billing</div>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Invoice" ? "active" : "")"
+                   asp-controller="Invoice" asp-action="Index">
+                    <i class="fas fa-file-invoice-dollar"></i> Invoices
+                </a>
+            }
+            else if (User.IsInRole("Doctor"))
+            {
+                <div class="nav-label mt-2">Clinical</div>
 
-            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Invoice" ? "active" : "")"
-               asp-controller="Invoice" asp-action="Index">
-                <i class="fas fa-file-invoice-dollar"></i> Invoices
-            </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appoinment" ? "active" : "")"
+                   asp-controller="Appoinment" asp-action="ListAppoinments">
+                    <i class="fas fa-calendar-check"></i> Appointments
+                </a>
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Visit" ? "active" : "")"
+                   asp-controller="Visit" asp-action="ListVisits">
+                    <i class="fas fa-stethoscope"></i> Visits
+                </a>
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Prescription" ? "active" : "")"
+                   asp-controller="Prescription" asp-action="Index">
+                    <i class="fas fa-file-prescription"></i> Prescriptions
+                </a>
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
+                   asp-controller="Patient" asp-action="ListPatients">
+                    <i class="fas fa-users"></i> Patients
+                </a>
+            }
+            else if (User.IsInRole("Receptionist"))
+            {
+                <div class="nav-label mt-2">Reception</div>
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
+                   asp-controller="Patient" asp-action="ListPatients">
+                    <i class="fas fa-users"></i> Patients
+                </a>
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appoinment" ? "active" : "")"
+                   asp-controller="Appoinment" asp-action="ListAppoinments">
+                    <i class="fas fa-calendar-check"></i> Appointments
+                </a>
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Visit" ? "active" : "")"
+                   asp-controller="Visit" asp-action="ListVisits">
+                    <i class="fas fa-stethoscope"></i> Visits
+                </a>
+
+                <div class="nav-label mt-2">Billing</div>
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Invoice" ? "active" : "")"
+                   asp-controller="Invoice" asp-action="Index">
+                    <i class="fas fa-file-invoice-dollar"></i> Invoices
+                </a>
+            }
         </nav>
 
         <div class="sidebar-footer">
@@ -360,8 +408,13 @@
             </div>
             <div class="user-info">
                 <h6>@(User.Identity?.Name ?? "Admin")</h6>
-                <small>System Manager</small>
+                <small>@(User.IsInRole("Admin") ? "System Manager" : User.IsInRole("Doctor") ? "Doctor" : User.IsInRole("Receptionist") ? "Receptionist" : "Staff")</small>
             </div>
+            <form asp-controller="Auth" asp-action="Logout" method="post" class="ms-auto">
+                <button type="submit" class="icon-btn border-0 bg-transparent text-muted" title="Logout">
+                    <i class="fas fa-right-from-bracket"></i>
+                </button>
+            </form>
         </div>
     </aside>
 

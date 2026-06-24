@@ -1,8 +1,445 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model depi__project.viewmodels.home.dashboardvm
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var appointmentTotal = Model.pendingAppointmentCount
+        + Model.confirmedAppointmentCount
+        + Model.completedAppointmentCount
+        + Model.cancelledAppointmentCount
+        + Model.noShowAppointmentCount;
+
+    var invoiceTotal = Model.paidInvoiceCount + Model.pendinginvoicecount + Model.cancelledInvoiceCount;
+    var trendMax = Math.Max(1, Model.appointmentTrendCounts.DefaultIfEmpty(0).Max());
+
+    int Percent(int value, int total) => total <= 0 ? 0 : (int)Math.Round(value * 100m / total);
+
+    var pendingPct = Percent(Model.pendingAppointmentCount, appointmentTotal);
+    var confirmedPct = Percent(Model.confirmedAppointmentCount, appointmentTotal);
+    var completedPct = Percent(Model.completedAppointmentCount, appointmentTotal);
+    var cancelledPct = Percent(Model.cancelledAppointmentCount, appointmentTotal);
+    var noShowPct = Percent(Model.noShowAppointmentCount, appointmentTotal);
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">@Model.RoleName Dashboard</h2>
+        <p class="text-muted mb-0">Welcome back, @Model.DisplayName. Here is what is happening today.</p>
+    </div>
+    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">
+        <i class="fas fa-user-shield me-1"></i>@Model.RoleName
+    </span>
+</div>
+
+@if (User.IsInRole("Admin"))
+{
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-primary-subtle text-primary"><i class="fas fa-user-injured"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Active Patients</div>
+                        <div class="metric-value">@Model.patientcount</div>
+                        <div class="text-muted small">Registered in the clinic</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-success-subtle text-success"><i class="fas fa-calendar-day"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Today's Appointments</div>
+                        <div class="metric-value">@Model.todayappointmentcount</div>
+                        <div class="text-muted small">@Model.appoinmentcount total appointments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-info-subtle text-info"><i class="fas fa-user-doctor"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Active Doctors</div>
+                        <div class="metric-value">@Model.totaldoctors</div>
+                        <div class="text-muted small">@Model.departmentcount active departments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-warning-subtle text-warning"><i class="fas fa-coins"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Paid Revenue</div>
+                        <div class="metric-value">@Model.revenue.ToString("N0")</div>
+                        <div class="text-muted small">@Model.pendinginvoicecount pending invoices</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (User.IsInRole("Doctor"))
+{
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-primary-subtle text-primary"><i class="fas fa-calendar-check"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">My Appointments</div>
+                        <div class="metric-value">@Model.appoinmentcount</div>
+                        <div class="text-muted small">Active appointments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-success-subtle text-success"><i class="fas fa-calendar-day"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Today's Schedule</div>
+                        <div class="metric-value">@Model.todayappointmentcount</div>
+                        <div class="text-muted small">Appointments today</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-info-subtle text-info"><i class="fas fa-users"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">My Patients</div>
+                        <div class="metric-value">@Model.patientcount</div>
+                        <div class="text-muted small">Unique assigned patients</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-warning-subtle text-warning"><i class="fas fa-stethoscope"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Visits</div>
+                        <div class="metric-value">@Model.visitcount</div>
+                        <div class="text-muted small">@Model.completedAppointmentCount completed appointments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-primary-subtle text-primary"><i class="fas fa-users"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Active Patients</div>
+                        <div class="metric-value">@Model.patientcount</div>
+                        <div class="text-muted small">Registered patients</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-success-subtle text-success"><i class="fas fa-calendar-check"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Appointments</div>
+                        <div class="metric-value">@Model.appoinmentcount</div>
+                        <div class="text-muted small">Managed by you</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-info-subtle text-info"><i class="fas fa-calendar-day"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Today's Appointments</div>
+                        <div class="metric-value">@Model.todayappointmentcount</div>
+                        <div class="text-muted small">@Model.confirmedAppointmentCount confirmed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="metric-icon bg-warning-subtle text-warning"><i class="fas fa-file-invoice-dollar"></i></span>
+                    <div>
+                        <div class="text-muted small fw-semibold">Pending Invoices</div>
+                        <div class="metric-value">@Model.pendinginvoicecount</div>
+                        <div class="text-muted small">@invoiceTotal total invoices</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-xl-8">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <div class="d-flex flex-wrap align-items-start justify-content-between gap-2 mb-4">
+                    <div>
+                        <h5 class="fw-bold mb-1">Appointments Overview</h5>
+                        <p class="text-muted small mb-0">Daily appointment volume for the current dashboard scope</p>
+                    </div>
+                    <span class="badge bg-light text-dark border">
+                        <i class="far fa-calendar me-1"></i>Last 7 days
+                    </span>
+                </div>
+
+                <div class="dashboard-bars" role="img" aria-label="Appointments during the last seven days">
+                    @for (var index = 0; index < Model.appointmentTrendLabels.Count; index++)
+                    {
+                        var value = Model.appointmentTrendCounts.ElementAtOrDefault(index);
+                        var barHeight = value == 0 ? 4 : Math.Max(14, Percent(value, trendMax));
+
+                        <div class="dashboard-bar-item">
+                            <div class="dashboard-bar-track">
+                                <div class="dashboard-bar bg-primary" style="height:@($"{barHeight}%")"></div>
+                            </div>
+                            <strong>@value</strong>
+                            <small>@Model.appointmentTrendLabels[index]</small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-1">Appointment Status</h5>
+                <p class="text-muted small mb-4">Current status distribution</p>
+
+                <div class="d-flex align-items-baseline gap-2 mb-4">
+                    <span class="display-6 fw-bold lh-1">@appointmentTotal</span>
+                    <span class="text-muted small">total appointments</span>
+                </div>
+
+                <div class="status-row">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span><span class="status-dot bg-warning"></span>Pending</span>
+                        <strong>@Model.pendingAppointmentCount</strong>
+                    </div>
+                    <div class="progress progress-sm"><div class="progress-bar bg-warning" style="width:@($"{pendingPct}%")"></div></div>
+                </div>
+                <div class="status-row">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span><span class="status-dot bg-primary"></span>Confirmed</span>
+                        <strong>@Model.confirmedAppointmentCount</strong>
+                    </div>
+                    <div class="progress progress-sm"><div class="progress-bar bg-primary" style="width:@($"{confirmedPct}%")"></div></div>
+                </div>
+                <div class="status-row">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span><span class="status-dot bg-success"></span>Completed</span>
+                        <strong>@Model.completedAppointmentCount</strong>
+                    </div>
+                    <div class="progress progress-sm"><div class="progress-bar bg-success" style="width:@($"{completedPct}%")"></div></div>
+                </div>
+                <div class="status-row">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span><span class="status-dot bg-danger"></span>Cancelled</span>
+                        <strong>@Model.cancelledAppointmentCount</strong>
+                    </div>
+                    <div class="progress progress-sm"><div class="progress-bar bg-danger" style="width:@($"{cancelledPct}%")"></div></div>
+                </div>
+                <div class="status-row mb-0">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span><span class="status-dot bg-secondary"></span>No Show</span>
+                        <strong>@Model.noShowAppointmentCount</strong>
+                    </div>
+                    <div class="progress progress-sm"><div class="progress-bar bg-secondary" style="width:@($"{noShowPct}%")"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 d-flex flex-wrap align-items-start justify-content-between gap-2 p-4 pb-0">
+                <div>
+                    <h5 class="fw-bold mb-1">Appointments Snapshot</h5>
+                    <p class="text-muted small mb-0">The latest appointments in your dashboard scope</p>
+                </div>
+                <a asp-controller="Appoinment" asp-action="ListAppoinments" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Patient</th>
+                            <th>Doctor</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th class="pe-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.items.Any())
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-5">
+                                    <i class="far fa-calendar-times d-block fs-3 mb-2"></i>
+                                    <strong class="d-block text-dark">No appointments to show</strong>
+                                    <span class="small">New appointments will appear here.</span>
+                                </td>
+                            </tr>
+                        }
+                        @foreach (var item in Model.items)
+                        {
+                            var patientName = string.IsNullOrWhiteSpace(item.Patient?.patientname) ? "N/A" : item.Patient.patientname;
+                            var patientInitial = patientName == "N/A" ? "N" : patientName.Substring(0, 1).ToUpper();
+                            var badgeClass = item.status.ToString() switch
+                            {
+                                "Pending" => "bg-warning text-dark",
+                                "Confirmed" => "bg-primary",
+                                "Completed" => "bg-success",
+                                "Cancelled" => "bg-danger",
+                                _ => "bg-secondary"
+                            };
+
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="avatar-initial bg-primary-subtle text-primary">@patientInitial</span>
+                                        <strong>@patientName</strong>
+                                    </div>
+                                </td>
+                                <td>@(item.DoctorName ?? "N/A")</td>
+                                <td>@item.Appoinmentdate.ToString("dd MMM yyyy")</td>
+                                <td>@item.startat.ToString("HH:mm")</td>
+                                <td class="pe-4"><span class="badge rounded-pill @badgeClass">@item.status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                @if (User.IsInRole("Doctor"))
+                {
+                    <h5 class="fw-bold mb-1">Today's Focus</h5>
+                    <p class="text-muted small mb-3">Your current workload</p>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="border rounded-3 bg-light p-3">
+                                <strong class="d-block fs-3 lh-1">@Model.todayappointmentcount</strong>
+                                <span class="text-muted small">Appointments today</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded-3 bg-light p-3">
+                                <strong class="d-block fs-3 lh-1">@Model.completedAppointmentCount</strong>
+                                <span class="text-muted small">Completed overall</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex flex-wrap align-items-start justify-content-between gap-2 mb-3">
+                        <div>
+                            <h5 class="fw-bold mb-1">Invoice Summary</h5>
+                            <p class="text-muted small mb-0">Current billing status</p>
+                        </div>
+                        <span class="badge bg-light text-dark border">@invoiceTotal total</span>
+                    </div>
+
+                    <div class="list-group list-group-flush border rounded-3 mb-3">
+                        <div class="list-group-item d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-check text-success me-2"></i>Paid</span>
+                            <strong>@Model.paidInvoiceCount</strong>
+                        </div>
+                        <div class="list-group-item d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-clock text-warning me-2"></i>Pending</span>
+                            <strong>@Model.pendinginvoicecount</strong>
+                        </div>
+                        <div class="list-group-item d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-xmark text-danger me-2"></i>Cancelled</span>
+                            <strong>@Model.cancelledInvoiceCount</strong>
+                        </div>
+                    </div>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="alert alert-warning d-flex align-items-center gap-3 py-3 mb-4">
+                            <i class="fas fa-boxes-stacked fs-5"></i>
+                            <div>
+                                <strong class="d-block">@Model.lowstockcount low-stock medicines</strong>
+                                <span class="small">Out of @Model.medicinecount active medicines</span>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <h6 class="fw-bold mb-2">Quick Actions</h6>
+                <div class="list-group list-group-flush quick-action-list">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="User" asp-action="ListDoctors" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-user-doctor text-primary me-2"></i>Manage Doctors</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a asp-controller="Department" asp-action="ListDepartments" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-building text-primary me-2"></i>Departments</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a asp-controller="Medicine" asp-action="ListMedicines" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-pills text-primary me-2"></i>Review Medicines</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                    }
+                    else if (User.IsInRole("Doctor"))
+                    {
+                        <a asp-controller="Appoinment" asp-action="ListAppoinments" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-calendar-check text-primary me-2"></i>My Appointments</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a asp-controller="Visit" asp-action="ListVisits" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-stethoscope text-primary me-2"></i>Visits</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a asp-controller="Prescription" asp-action="Index" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-file-prescription text-primary me-2"></i>Prescriptions</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Patient" asp-action="AddPatient" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-user-plus text-primary me-2"></i>Add Patient</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a asp-controller="Appoinment" asp-action="AddAppoinment" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-calendar-plus text-primary me-2"></i>Book Appointment</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a asp-controller="Invoice" asp-action="Index" class="list-group-item list-group-item-action px-0 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-file-invoice-dollar text-primary me-2"></i>Invoices</span><i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
