@@ -418,6 +418,11 @@ namespace depi__project.Controllers
             }
             return RedirectToAction(nameof(ListReceptionists));
         }
-        
+
+        public IActionResult ListUsers()
+        {
+            return View();
+        }
+
     }
 }

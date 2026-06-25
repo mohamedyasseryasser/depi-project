@@ -1,62 +1,106 @@
 ﻿@model IEnumerable<depi__project.viewmodels.userviewmodel.responsereceptionistviewmodel>
 
 @{
-    ViewData["Title"] = "Receptionists List";
+    ViewData["Title"] = "Receptionists";
 }
 
-<h1>Receptionists List</h1>
-
-<p>
-    <a asp-action="AddReceptionist" class="btn btn-success">Add New Receptionist</a>
-</p>
-<form asp-action="ListReceptionists" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name or email: <input type="text" name="SearchTerm" value="@ViewBag.SearchTerm" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="ListReceptionists">Back to Full List</a>
-        </p>
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="mb-0 fw-bold">Manage Receptionists</h5>
+            </div>
+            <div class="col-auto">
+                <a asp-action="AddReceptionist" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i> Add New Receptionist
+                </a>
+            </div>
+        </div>
+        <hr>
+        <form asp-action="ListReceptionists" method="get" class="row g-3">
+            <div class="col-md-9">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="SearchTerm" class="form-control bg-light border-start-0" placeholder="Search receptionists..." value="@ViewBag.SearchTerm" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="btn-group w-100">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                    <a asp-action="ListReceptionists" class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Salary</th>
-            <th>Hire Date</th>
-            <th>Active</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.UserName</td>
-                <td>@item.Email</td>
-                <td>@item.PhoneNumber</td>
-                <td>@item.salary.ToString("C")</td>
-                <td>@item.hiredate.ToShortDateString()</td>
-                <td>@(item.IsActive ? "Yes" : "No")</td>
-                <td>
-                    <a asp-action="UpdateReceptionist" asp-route-id="@item.resptionistid" class="btn btn-primary btn-sm">Edit</a> |
-                    <a asp-action="ReceptionistDetails" asp-route-id="@item.resptionistid" class="btn btn-info btn-sm">Details</a> |
-                    <form asp-action="RemoveReceptionist" asp-route-id="@item.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this receptionist?');">
-                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+</div>
 
-<div class="pagination">
-    @if (ViewBag.PageNumber > 1)
-    {
-        <a asp-action="ListReceptionists" asp-route-pageNumber="@(ViewBag.PageNumber - 1)" class="btn btn-secondary">Previous</a>
-    }
-    <span>Page @ViewBag.PageNumber</span>
-    <a asp-action="ListReceptionists" asp-route-pageNumber="@(ViewBag.PageNumber + 1)" class="btn btn-secondary">Next</a>
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Receptionist Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Salary</th>
+                        <th>Hire Date</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 text-muted">#@item.resptionistid</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                        @(item.UserName?.Substring(0, 1).ToUpper() ?? "R")
+                                    </div>
+                                    <span class="fw-bold">@item.UserName</span>
+                                </div>
+                            </td>
+                            <td class="small">@item.Email</td>
+                            <td>@item.PhoneNumber</td>
+                            <td><span class="badge bg-light text-dark border">@item.salary.ToString("C")</span></td>
+                            <td class="small text-muted">@item.hiredate.ToShortDateString()</td>
+                            <td>
+                                <span class="badge rounded-pill @(item.IsActive ? "bg-success" : "bg-secondary")">
+                                    @(item.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                        <a asp-action="UpdateReceptionist" asp-route-id="@item.resptionistid" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a><a asp-action="ReceptionistDetails" asp-route-id="@item.resptionistid" class="btn btn-sm btn-outline-info"><i class="fas fa-eye"></i></a>
+                                        <form asp-action="RemoveReceptionist" asp-route-id="@item.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this receptionist?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer bg-white py-3">
+        @{
+            var prevDisabled = (ViewBag.PageNumber <= 1) ? "disabled" : "";
+            var nextDisabled = (!Model.Any() || Model.Count() < ViewBag.PageSize) ? "disabled" : "";
+        }
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm justify-content-center mb-0">
+                <li class="page-item @prevDisabled">
+                    <a class="page-link" asp-action="ListReceptionists" asp-route-pageNumber="@(ViewBag.PageNumber - 1)" asp-route-pageSize="@ViewBag.PageSize" asp-route-searchTerm="@ViewBag.SearchTerm">Previous</a>
+                </li>
+                <li class="page-item disabled"><span class="page-link">Page @ViewBag.PageNumber</span></li>
+                <li class="page-item @nextDisabled">
+                    <a class="page-link" asp-action="ListReceptionists" asp-route-pageNumber="@(ViewBag.PageNumber + 1)" asp-route-pageSize="@ViewBag.PageSize" asp-route-searchTerm="@ViewBag.SearchTerm">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>

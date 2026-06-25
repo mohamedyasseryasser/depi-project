@@ -309,8 +309,8 @@
             @if (User.IsInRole("Admin"))
             {
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")"
-                   asp-controller="User" asp-action="ListDoctors">
-                    <i class="fas fa-user-md"></i> Staff
+                   asp-controller="User" asp-action="ListUsers">
+                    <i class="fas fa-user-md"></i> Users
                 </a>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Department" ? "active" : "")"

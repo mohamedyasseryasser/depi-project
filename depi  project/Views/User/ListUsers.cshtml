@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Users Management";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold">
+            <i class="fas fa-users me-2 text-primary"></i>Users Management
+        </h5>
+        <p class="text-muted small mb-0 mt-1">Manage all system users from one place</p>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-4">
+
+            <!-- Admins -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="border-top: 4px solid #0d6efd !important;">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+                                <i class="fas fa-user-shield fa-lg text-primary"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-0">Admins</h5>
+                                <small class="text-muted">System Administrators</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small">
+                            Full access to system settings, user management, and configurations.
+                        </p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-shield-alt text-primary me-1"></i>
+                                <small class="text-muted">Full permissions</small>
+                            </div>
+                            <a asp-controller="User" asp-action="ListAdmins"
+                               class="btn btn-primary btn-sm px-3">
+                                View All <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctors -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="border-top: 4px solid #198754 !important;">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+                                <i class="fas fa-user-md fa-lg text-success"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-0">Doctors</h5>
+                                <small class="text-muted">Medical Staff</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small">
+                            Manage doctor profiles, specializations, departments and schedules.
+                        </p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-stethoscope text-success me-1"></i>
+                                <small class="text-muted">Medical access</small>
+                            </div>
+                            <a asp-controller="User" asp-action="ListDoctors"
+                               class="btn btn-success btn-sm px-3">
+                                View All <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receptionists -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="border-top: 4px solid #0dcaf0 !important;"><div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
+                                <i class="fas fa-user-tie fa-lg text-info"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-0">Receptionists</h5>
+                                <small class="text-muted">Front Desk Staff</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small">
+                            Manage receptionist profiles, appointments and patient coordination.
+                        </p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-concierge-bell text-info me-1"></i>
+                                <small class="text-muted">Front desk access</small>
+                            </div>
+                            <a asp-controller="User" asp-action="ListReceptionists"
+                               class="btn btn-info btn-sm px-3 text-white">
+                                View All <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
