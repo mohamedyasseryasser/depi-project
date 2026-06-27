@@ -4,83 +4,92 @@
     ViewData["Title"] = "Book Appointment";
 }
 
-<div class="row">
-    <div class="col-md-8 mx-auto">
+<div class="row justify-content-center">
+    <div class="col-md-10">
         <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0 fw-bold text-primary">Book New Appointment</h5>
-                    <a asp-action="ListAppoinments" class="btn btn-outline-secondary btn-sm">Back</a>
-                </div>
-                <hr />
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-calendar-check me-2"></i>Book New Appointment</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="SaveAddAppoinment" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-4 small"></div>
 
-                <form asp-action="SaveAddAppoinment" method="post" class="row g-3">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                    <div class="col-md-6">
-                        <label asp-for="PhoneNumber" class="form-label fw-bold">Patient Phone Number</label>
-                        <input asp-for="PhoneNumber" class="form-control" placeholder="e.g. 01012345678" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
-                        <div class="form-text text-muted small">Must correspond to an existing registered patient.</div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label asp-for="doctorid" class="form-label fw-bold">Doctor</label>
-                        <select asp-for="doctorid" asp-items="Model.doctorsvm" class="form-select">
-                            <option value="">-- Select Doctor --</option>
-                        </select>
-                        <span asp-validation-for="doctorid" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label asp-for="resptionistidid" class="form-label fw-bold">Receptionist</label>
-                        <select asp-for="resptionistidid" asp-items="Model.receptionists" class="form-select">
-                            <option value="">-- Select Receptionist --</option>
-                        </select>
-                        <span asp-validation-for="resptionistidid" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label asp-for="type" class="form-label fw-bold">Appointment Type</label>
-                        <select asp-for="type" asp-items="Html.GetEnumSelectList<depi__project.enums.typeofappoinment>()" class="form-select"></select>
-                        <span asp-validation-for="type" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label asp-for="Appoinmentdate" class="form-label fw-bold">Appointment Date</label>
-                        <input asp-for="Appoinmentdate" type="date" class="form-control" />
-                        <span asp-validation-for="Appoinmentdate" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label asp-for="startat" class="form-label fw-bold">Start Time</label>
-                        <input asp-for="startat" type="time" class="form-control" />
-                        <span asp-validation-for="startat" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label asp-for="endat" class="form-label fw-bold">End Time</label>
-                        <input asp-for="endat" type="time" class="form-control" />
-                        <span asp-validation-for="endat" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-12">
-                        <label asp-for="cost" class="form-label fw-bold">Consultation Cost</label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="cost" type="number" step="0.01" class="form-control" placeholder="100.00" />
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="PhoneNumber" class="form-label small fw-bold text-muted">Patient Phone Number</label>
+                            <input asp-for="PhoneNumber" class="form-control bg-light" placeholder="e.g. 01012345678" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            <div class="form-text text-muted small">Must correspond to an existing registered patient.</div>
                         </div>
-                        <span asp-validation-for="cost" class="text-danger small"></span>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="doctorid" class="form-label small fw-bold text-muted">Doctor</label>
+                            <select asp-for="doctorid" asp-items="Model.doctorsvm" class="form-select bg-light">
+                                <option value="">-- Select Doctor --</option>
+                            </select>
+                            <span asp-validation-for="doctorid" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    <div class="col-12">
-                        <label asp-for="notes" class="form-label fw-bold">Notes</label>
-                        <textarea asp-for="notes" rows="3" class="form-control" placeholder="Any special requests, symptoms, or info..."></textarea>
-                        <span asp-validation-for="notes" class="text-danger small"></span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="resptionistidid" class="form-label small fw-bold text-muted">Receptionist</label>
+                            <select asp-for="resptionistidid" asp-items="Model.receptionists" class="form-select bg-light">
+                                <option value="">-- Select Receptionist --</option>
+                            </select>
+                            <span asp-validation-for="resptionistidid" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="type" class="form-label small fw-bold text-muted">Appointment Type</label>
+                            <select asp-for="type" asp-items="Html.GetEnumSelectList<depi__project.enums.typeofappoinment>()" class="form-select bg-light"></select>
+                            <span asp-validation-for="type" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn btn-primary px-4">Book Appointment</button>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Appoinmentdate" class="form-label small fw-bold text-muted">Appointment Date</label>
+                            <input asp-for="Appoinmentdate" type="date" class="form-control bg-light" />
+                            <span asp-validation-for="Appoinmentdate" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="startat" class="form-label small fw-bold text-muted">Start Time</label>
+                            <input asp-for="startat" type="time" class="form-control bg-light" />
+                            <span asp-validation-for="startat" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="endat" class="form-label small fw-bold text-muted">End Time</label><input asp-for="endat" type="time" class="form-control bg-light" />
+                            <span asp-validation-for="endat" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="cost" class="form-label small fw-bold text-muted">Consultation Cost</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">$</span>
+                                <input asp-for="cost" type="number" step="0.01" class="form-control bg-light" placeholder="100.00" />
+                            </div>
+                            <span asp-validation-for="cost" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="notes" class="form-label small fw-bold text-muted">Notes</label>
+                            <textarea asp-for="notes" rows="3" class="form-control bg-light" placeholder="Any special requests, symptoms, or info..."></textarea>
+                            <span asp-validation-for="notes" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="ListAppoinments" class="btn btn-light border text-muted">
+                            <i class="fas fa-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">
+                            <i class="fas fa-save me-1"></i> Book Appointment
+                        </button>
                     </div>
                 </form>
             </div>

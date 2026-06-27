@@ -1,76 +1,94 @@
 ﻿@model depi__project.viewmodels.userviewmodel.resceptionistviewmodel
-
+@using depi__project.enums
 @{
     ViewData["Title"] = "Add New Receptionist";
 }
 
-<h1>Add New Receptionist</h1>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-user-tie me-2"></i>Receptionist Registration</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="SaveAddReceptionist">
+                    <div asp-validation-summary="All" class="text-danger mb-4 small"></div>
 
-<h4>Receptionist Details</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="SaveAddReceptionist">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="confirmpassword" class="control-label"></label>
-                <input asp-for="confirmpassword" type="password" class="form-control" />
-                <span asp-validation-for="confirmpassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input asp-for="address" class="form-control" />
-                <span asp-validation-for="address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <select asp-for="Gender" class="form-control">
-                    <option value="">-- Select Gender --</option>
-                    <option value="1">Male</option>
-                    <option value="2">Female</option>
-                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="salary" class="control-label"></label>
-                <input asp-for="salary" class="form-control" />
-                <span asp-validation-for="salary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="hiredate" class="control-label"></label>
-                <input asp-for="hiredate" type="date" class="form-control" />
-                <span asp-validation-for="hiredate" class="text-danger"></span>
-            </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="UserName" class="form-label small fw-bold text-muted">Username</label>
+                            <input asp-for="UserName" class="form-control bg-light" placeholder="Enter username" />
+                            <span asp-validation-for="UserName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label small fw-bold text-muted">Email Address</label>
+                            <input asp-for="Email" class="form-control bg-light" placeholder="example@clinic.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Password" class="form-label small fw-bold text-muted">Password</label>
+                            <input asp-for="Password" type="password" class="form-control bg-light" placeholder="Min 6 characters" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="confirmpassword" class="form-label small fw-bold text-muted">Confirm Password</label>
+                            <input asp-for="confirmpassword" type="password" class="form-control bg-light" placeholder="Repeat password" />
+                            <span asp-validation-for="confirmpassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="address" class="form-label small fw-bold text-muted">Home Address</label>
+                            <input asp-for="address" class="form-control bg-light" placeholder="Full address" />
+                            <span asp-validation-for="address" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="PhoneNumber" class="form-label small fw-bold text-muted">Phone Number</label>
+                            <input asp-for="PhoneNumber" class="form-control bg-light" placeholder="01xxxxxxxxx" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Gender" class="form-label small fw-bold text-muted">Gender</label>
+                            <select asp-for="Gender" class="form-select bg-light">
+                                <option value="">-- Select --</option>
+                                <option value="1">Male</option>
+                                <option value="2">Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="salary" class="form-label small fw-bold text-muted">Salary ($)</label>
+                            <input asp-for="salary" class="form-control bg-light" placeholder="Monthly salary" />
+                            <span asp-validation-for="salary" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="hiredate" class="form-label small fw-bold text-muted">Hire Date</label>
+                            <input asp-for="hiredate" type="date" class="form-control bg-light" />
+                            <span asp-validation-for="hiredate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="ListReceptionists" class="btn btn-light border text-muted">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Directory
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">
+                            <i class="fas fa-save me-1"></i> Register Receptionist
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="ListReceptionists">Back to List</a> {{-- Redirect to a generic list for now --}}
 </div>
 
 @section Scripts {

@@ -4,68 +4,88 @@
     ViewData["Title"] = "Update Receptionist";
 }
 
-<h1>Update Receptionist</h1>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-user-tie me-2"></i>Update Receptionist</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="SaveUpdateReceptionist">
+                    <div asp-validation-summary="All" class="text-danger mb-4 small"></div>
+                    <input type="hidden" asp-for="userid" />
+                    <input type="hidden" asp-for="receptionid" />
 
-<h4>Update Receptionist Details</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="SaveUpdateReceptionist">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <input type="hidden" asp-for="userid" />
-                        <input type="hidden" asp-for="receptionid" />
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="UserName" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="UserName" class="form-control bg-light" />
+                            <span asp-validation-for="UserName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="Email" class="form-control bg-light" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input asp-for="address" class="form-control" />
-                <span asp-validation-for="address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>  <div class="form-group">
-                <label asp-for="hiredate" class="control-label"></label>
-                <input asp-for="hiredate" class="form-control" />
-                <span asp-validation-for="hiredate" class="text-danger"></span>
-            </div>  <div class="form-group">
-                <label asp-for="salary" class="control-label"></label>
-                <input asp-for="salary" class="form-control" />
-                <span asp-validation-for="salary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <select asp-for="Gender" class="form-control">
-                    <option value="">-- Select Gender --</option>
-                    <option value="1">Male</option>
-                    <option value="2">Female</option>
-                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsActive" class="control-label"></label>
-                <input asp-for="IsActive" type="checkbox" />
-                <span asp-validation-for="IsActive" class="text-danger"></span>
-            </div
-            <div class="form-group">
-                <input type="submit" value="Save Changes" class="btn btn-primary" />
-            </div>
-        </form>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="address" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="address" class="form-control bg-light" />
+                            <span asp-validation-for="address" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="PhoneNumber" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="PhoneNumber" class="form-control bg-light" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="hiredate" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="hiredate" class="form-control bg-light" />
+                            <span asp-validation-for="hiredate" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="salary" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="salary" class="form-control bg-light" />
+                            <span asp-validation-for="salary" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Gender" class="form-label small fw-bold text-muted"></label>
+                            <select asp-for="Gender" class="form-select bg-light">
+                                <option value="">-- Select Gender --</option>
+                                <option value="1">Male</option>
+                                <option value="2">Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger small"></span>
+                        </div>
+                    </div><div class="row">
+                    <div class="col-md-12 mb-4">
+                        <div class="form-check">
+                            <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label small fw-bold text-muted"></label>
+                            <span asp-validation-for="IsActive" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="ListReceptionists" class="btn btn-light border text-muted">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                    <button type="submit" class="btn btn-primary px-5 fw-bold">
+                        <i class="fas fa-save me-1"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="ListReceptionists">Back to List</a>
 </div>
 
 @section Scripts {
