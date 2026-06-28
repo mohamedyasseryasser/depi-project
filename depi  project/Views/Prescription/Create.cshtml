@@ -155,7 +155,7 @@
             function reindexRows() {
                 itemsBody.querySelectorAll('.item-row').forEach((row, index) => {
                     row.querySelectorAll('[name]').forEach(input => {
-                        input.name = input.name.replace(/items\[\d+\]/, items[${index}]);
+                        input.name = input.name.replace(/items\[\d+\]/, `items[${index}]`);
                     });
                 });
             }

@@ -121,6 +121,7 @@ namespace depi__project.services.reporesity
             {
                 var department= await Context.Departments
                 .Include(d => d.doctors)
+                    .ThenInclude(doc => doc.user)
                 .Include(d => d.user)
                 .FirstOrDefaultAsync(d => d.DepartmentId == id);
                 if (department == null)

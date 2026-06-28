@@ -5,104 +5,105 @@
     var medicineOptions = Model.items.FirstOrDefault()?.medicines ?? new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
 }
 
-<div class="card border-0 shadow-sm">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0 fw-bold">Edit Prescription #@Model.prescriptionid</h5>
-            <a asp-action="Details" asp-route-id="@Model.prescriptionid" class="btn btn-outline-secondary btn-sm">Back</a>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-prescription me-2"></i>Edit Prescription #@Model.prescriptionid</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Edit" method="post" id="prescriptionForm">
+                    <input type="hidden" asp-for="prescriptionid" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label asp-for="visitid" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="visitid" class="form-control bg-light" readonly />
+                            <span asp-validation-for="visitid" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="prescriptiondate" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="prescriptiondate" class="form-control bg-light" type="date" />
+                            <span asp-validation-for="prescriptiondate" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="notes" class="form-label small fw-bold text-muted"></label>
+                            <input asp-for="notes" class="form-control bg-light" />
+                            <span asp-validation-for="notes" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold mb-0 text-muted">Medicines</h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="addItemBtn">+ Add Medicine Row</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle" id="itemsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="min-width:180px">Medicine</th>
+                                    <th>Dosage</th>
+                                    <th>Frequency</th>
+                                    <th>Duration</th>
+                                    <th style="width:90px">Qty</th>
+                                    <th style="min-width:200px">Instructions</th>
+                                    <th style="width:60px"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemsBody">
+                                @for (var i = 0; i < Model.items.Count; i++)
+                                {
+                                    <tr class="item-row">
+                                        <td>
+                                            <input type="hidden" asp-for="items[i].prescriptionitemid" />
+                                            <select asp-for="items[i].mdeicineid" asp-items="medicineOptions" class="form-select form-select-sm">
+                                                <option value="">-- Select --</option>
+                                            </select><span asp-validation-for="items[i].mdeicineid" class="text-danger small"></span>
+                                        </td>
+                                        <td>
+                                            <input asp-for="items[i].Dosage" class="form-control form-control-sm" />
+                                            <span asp-validation-for="items[i].Dosage" class="text-danger small"></span>
+                                        </td>
+                                        <td>
+                                            <input asp-for="items[i].Frequency" class="form-control form-control-sm" />
+                                            <span asp-validation-for="items[i].Frequency" class="text-danger small"></span>
+                                        </td>
+                                        <td>
+                                            <input asp-for="items[i].Duration" class="form-control form-control-sm" />
+                                            <span asp-validation-for="items[i].Duration" class="text-danger small"></span>
+                                        </td>
+                                        <td>
+                                            <input asp-for="items[i].quantity" class="form-control form-control-sm" type="number" min="1" />
+                                            <span asp-validation-for="items[i].quantity" class="text-danger small"></span>
+                                        </td>
+                                        <td>
+                                            <input asp-for="items[i].Instructions" class="form-control form-control-sm" />
+                                            <span asp-validation-for="items[i].Instructions" class="text-danger small"></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">&times;</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-primary">Update Prescription</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <form asp-action="Edit" method="post" id="prescriptionForm">
-            <input type="hidden" asp-for="prescriptionid" />
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-            <div class="row g-3 mb-4">
-                <div class="col-md-4">
-                    <label asp-for="visitid" class="form-label"></label>
-                    <input asp-for="visitid" class="form-control" readonly />
-                    <span asp-validation-for="visitid" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="prescriptiondate" class="form-label"></label>
-                    <input asp-for="prescriptiondate" class="form-control" type="date" />
-                    <span asp-validation-for="prescriptiondate" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="notes" class="form-label"></label>
-                    <input asp-for="notes" class="form-control" />
-                    <span asp-validation-for="notes" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6 class="fw-bold mb-0">Medicines</h6>
-                <button type="button" class="btn btn-sm btn-outline-primary" id="addItemBtn">+ Add Medicine Row</button>
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle" id="itemsTable">
-                    <thead class="table-light">
-                        <tr>
-                            <th style="min-width:180px">Medicine</th>
-                            <th>Dosage</th>
-                            <th>Frequency</th>
-                            <th>Duration</th>
-                            <th style="width:90px">Qty</th>
-                            <th style="min-width:200px">Instructions</th>
-                            <th style="width:60px"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="itemsBody">
-                        @for (var i = 0; i < Model.items.Count; i++)
-                        {
-                            <tr class="item-row">
-                                <td>
-                                    <input type="hidden" asp-for="items[i].prescriptionitemid" />
-                                    <select asp-for="items[i].mdeicineid" asp-items="medicineOptions" class="form-select form-select-sm">
-                                        <option value="">-- Select --</option>
-                                    </select>
-                                    <span asp-validation-for="items[i].mdeicineid" class="text-danger small"></span>
-                                </td>
-                                <td>
-                                    <input asp-for="items[i].Dosage" class="form-control form-control-sm" />
-                                    <span asp-validation-for="items[i].Dosage" class="text-danger small"></span>
-                                </td>
-                                <td>
-                                    <input asp-for="items[i].Frequency" class="form-control form-control-sm" />
-                                    <span asp-validation-for="items[i].Frequency" class="text-danger small"></span>
-                                </td>
-                                <td>
-                                    <input asp-for="items[i].Duration" class="form-control form-control-sm" />
-                                    <span asp-validation-for="items[i].Duration" class="text-danger small"></span>
-                                </td>
-                                <td>
-                                    <input asp-for="items[i].quantity" class="form-control form-control-sm" type="number" min="1" />
-                                    <span asp-validation-for="items[i].quantity" class="text-danger small"></span>
-                                </td>
-                                <td>
-                                    <input asp-for="items[i].Instructions" class="form-control form-control-sm" />
-                                    <span asp-validation-for="items[i].Instructions" class="text-danger small"></span>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">&times;</button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="text-end mt-3">
-                <button type="submit" class="btn btn-primary">Update Prescription</button>
-            </div>
-        </form>
     </div>
 </div>
 
 <template id="itemRowTemplate">
     <tr class="item-row">
         <td>
-            <select class="form-select form-select-sm" name="items[__index__].mdeicineid">
+            <select class="form-select form-select-sm" name="items[index].mdeicineid">
                 <option value="">-- Select --</option>
                 @foreach (var med in medicineOptions)
                 {
@@ -110,11 +111,11 @@
                 }
             </select>
         </td>
-        <td><input class="form-control form-control-sm" name="items[__index__].Dosage" /></td>
-        <td><input class="form-control form-control-sm" name="items[__index__].Frequency" /></td>
-        <td><input class="form-control form-control-sm" name="items[__index__].Duration" /></td>
-        <td><input class="form-control form-control-sm" name="items[__index__].quantity" type="number" min="1" value="1" /></td>
-        <td><input class="form-control form-control-sm" name="items[__index__].Instructions" /></td>
+        <td><input class="form-control form-control-sm" name="items[index].Dosage" /></td>
+        <td><input class="form-control form-control-sm" name="items[index].Frequency" /></td>
+        <td><input class="form-control form-control-sm" name="items[index].Duration" /></td>
+        <td><input class="form-control form-control-sm" name="items[index].quantity" type="number" min="1" value="1" /></td>
+        <td><input class="form-control form-control-sm" name="items[index].Instructions" /></td>
         <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">&times;</button></td>
     </tr>
 </template>
@@ -125,9 +126,7 @@
         (function () {
             const itemsBody = document.getElementById('itemsBody');
             const template = document.getElementById('itemRowTemplate').innerHTML;
-            const addBtn = document.getElementById('addItemBtn');
-
-            function reindexRows() {
+            const addBtn = document.getElementById('addItemBtn');function reindexRows() {
                 itemsBody.querySelectorAll('.item-row').forEach((row, index) => {
                     row.querySelectorAll('[name]').forEach(input => {
                         input.name = input.name.replace(/items\[\d+\]/, `items[${index}]`);
@@ -148,7 +147,7 @@
 
             addBtn.addEventListener('click', function () {
                 const index = itemsBody.querySelectorAll('.item-row').length;
-                itemsBody.insertAdjacentHTML('beforeend', template.replace(/__index__/g, index));
+                itemsBody.insertAdjacentHTML('beforeend', template.replace(/index/g, index));
                 bindRemoveButtons();
             });
 

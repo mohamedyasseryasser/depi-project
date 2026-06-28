@@ -4,52 +4,62 @@
     ViewData["Title"] = "Start Clinic Visit";
 }
 
-<div class="row">
-    <div class="col-md-8 mx-auto">
+<div class="row justify-content-center">
+    <div class="col-md-10">
         <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0 fw-bold text-primary">Start Clinic Visit</h5>
-                    <a asp-action="ListVisits" class="btn btn-outline-secondary btn-sm">Back</a>
-                </div>
-                <hr />
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-clipboard-list me-2"></i>Start Clinic Visit</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="SaveAddVisit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-4 small"></div>
 
-                <form asp-action="SaveAddVisit" method="post" class="row g-3">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                    <div class="col-md-12">
-                        <label asp-for="appoinmentid" class="form-label fw-bold">Select Scheduled Appointment</label>
-                        @if (Model.appoinmentid > 0)
-                        {
-                            <input type="hidden" asp-for="appoinmentid" />
-                            <div class="form-control bg-light">
-                                Appointment ID: <strong>#@Model.appoinmentid</strong> (Pre-selected)
-                            </div>
-                        }
-                        else
-                        {
-                            <select asp-for="appoinmentid" asp-items="ViewBag.Appointments" class="form-select fs-5 py-2">
-                                <option value="">-- Select Appointment --</option>
-                            </select>
-                        }
-                        <span asp-validation-for="appoinmentid" class="text-danger small"></span>
-                        <div class="form-text text-muted small">Only appointments marked as Pending/Confirmed and without an active visit will appear.</div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="appoinmentid" class="form-label small fw-bold text-muted">Select Scheduled Appointment</label>
+                            @if (Model.appoinmentid > 0)
+                            {
+                                <input type="hidden" asp-for="appoinmentid" />
+                                <div class="form-control bg-light">
+                                    Appointment ID: <strong>#@Model.appoinmentid</strong> (Pre-selected)
+                                </div>
+                            }
+                            else
+                            {
+                                <select asp-for="appoinmentid" asp-items="ViewBag.Appointments" class="form-select bg-light">
+                                    <option value="">-- Select Appointment --</option>
+                                </select>
+                            }
+                            <span asp-validation-for="appoinmentid" class="text-danger small"></span>
+                            <div class="form-text text-muted small">Only appointments marked as Pending/Confirmed and without an active visit will appear.</div>
+                        </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <label asp-for="diagnosis" class="form-label fw-bold">Diagnosis / Chief Complaint</label>
-                        <input asp-for="diagnosis" class="form-control py-2" placeholder="e.g. Chronic seasonal allergy, migraine" />
-                        <span asp-validation-for="diagnosis" class="text-danger small"></span>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="diagnosis" class="form-label small fw-bold text-muted">Diagnosis / Chief Complaint</label>
+                            <input asp-for="diagnosis" class="form-control bg-light" placeholder="e.g. Chronic seasonal allergy, migraine" />
+                            <span asp-validation-for="diagnosis" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <label asp-for="notes" class="form-label fw-bold">Physician Notes</label>
-                        <textarea asp-for="notes" rows="4" class="form-control" placeholder="Describe symptoms, temperature, blood pressure, or general exam notes..."></textarea>
-                        <span asp-validation-for="notes" class="text-danger small"></span>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="notes" class="form-label small fw-bold text-muted">Physician Notes</label>
+                            <textarea asp-for="notes" rows="4" class="form-control bg-light" placeholder="Describe symptoms, temperature, blood pressure, or general exam notes..."></textarea>
+                            <span asp-validation-for="notes" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn btn-success text-white px-4 py-2 fs-6">Start Visit</button>
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="ListVisits" class="btn btn-light border text-muted">
+                            <i class="fas fa-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">
+                            <i class="fas fa-save me-1"></i> Start Visit
+                        </button>
                     </div>
                 </form>
             </div>

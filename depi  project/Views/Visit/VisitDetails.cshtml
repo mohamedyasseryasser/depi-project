@@ -4,167 +4,168 @@
     ViewData["Title"] = "Visit Details";
 }
 
-<div class="row">
-    <div class="col-md-9 mx-auto">
+@{
+    var badgeClass = Model.visitstatus switch
+    {
+        depi__project.enums.VisitStatus.InProgress => "bg-warning text-dark",
+        depi__project.enums.VisitStatus.Completed => "bg-success",
+        _ => "bg-secondary"
+    };
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+
         <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-0 fw-bold">Visit Record #@Model.visitid</h5>
-                    <small class="text-muted">For Appointment <a asp-controller="Appoinment" asp-action="AppoinmentDetails" asp-route-id="@Model.appoinmentid">#@Model.appoinmentid</a></small>
-                </div>
-                <a asp-action="ListVisits" class="btn btn-sm btn-outline-secondary">Back to List</a>
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-clipboard-list me-2"></i>Visit Details</h5>
             </div>
-            <div class="card-body">
-                <div class="row mb-4">
-                    <div class="col-sm-6">
-                        <small class="text-muted text-uppercase d-block">Patient Name</small>
-                        <strong class="fs-5">@(Model.ResponseAppoimentVM?.Patient?.patientname ?? "N/A")</strong>
-                        <div class="text-muted small">Phone: @(Model.ResponseAppoimentVM?.PhoneNumber ?? "N/A")</div>
-                    </div>
-                    <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
-                        <small class="text-muted text-uppercase d-block">Visit Status</small>
-                        @{
-                            var badgeClass = Model.visitstatus switch
-                            {
-                                depi__project.enums.VisitStatus.InProgress => "bg-warning text-dark",
-                                depi__project.enums.VisitStatus.Completed => "bg-success",
-                                _ => "bg-secondary"
-                            };
-                        }
-                        <span class="badge rounded-pill fs-6 @badgeClass">@Model.visitstatus</span>
-                    </div>
-                </div>
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-sm-3 small fw-bold text-muted">Visit ID</dt>
+                    <dd class="col-sm-9">#@Model.visitid</dd>
 
-                <div class="row g-3">
-                    <div class="col-md-6 bg-light p-3 rounded border border-white">
-                        <h6 class="fw-bold text-primary mb-2">Diagnosis</h6>
-                        <div class="p-2 bg-white rounded border border-light min-height-100">
-                            @(string.IsNullOrWhiteSpace(Model.diagnosis) ? "No diagnosis recorded yet." : Model.diagnosis)
-                        </div>
-                    </div>
-                    <div class="col-md-6 bg-light p-3 rounded border border-white">
-                        <h6 class="fw-bold text-primary mb-2">Visit Notes</h6>
-                        <div class="p-2 bg-white rounded border border-light min-height-100">
-                            @(string.IsNullOrWhiteSpace(Model.notes) ? "No notes recorded yet." : Model.notes)
-                        </div>
-                    </div>
-                </div>
+                    <dt class="col-sm-3 small fw-bold text-muted">Appointment</dt>
+                    <dd class="col-sm-9">
+                        <a asp-controller="Appoinment" asp-action="AppoinmentDetails" asp-route-id="@Model.appoinmentid">#@Model.appoinmentid</a>
+                    </dd>
 
-                <!-- Doctor & Appointment Card -->
-                <div class="card mt-4 border-0 bg-light">
-                    <div class="card-body">
-                        <h6 class="fw-bold mb-3">Appointment Reference</h6>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <span class="text-muted">Doctor:</span> <strong class="text-dark">@(Model.ResponseAppoimentVM?.DoctorName ?? "N/A")</strong>
-                            </div>
-                            <div class="col-sm-4">
-                                <span class="text-muted">Scheduled Date:</span> @Model.visitdate.ToString("yyyy-MM-dd")
-                            </div>
-                            <div class="col-sm-4">
-                                <span class="text-muted">Consultation Fee:</span> $@(Model.ResponseAppoimentVM?.cost.ToString("F2") ?? "0.00")
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <dt class="col-sm-3 small fw-bold text-muted">Status</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge rounded-pill @badgeClass">@Model.visitstatus</span>
+                    </dd>
 
-                <!-- Prescription & Invoice (Linked features owned by teammates) -->
-                <div class="row mt-4 g-3">
-                    <div class="col-md-6">
-                        <div class="card h-100 border border-light shadow-sm">
-                            <div class="card-body">
-                                <h6 class="fw-bold mb-3 d-flex justify-content-between align-items-center">
-                                    <span>Prescription</span>
-                                    @if (Model.Prescription != null)
-                                    {
-                                        <span class="badge bg-success">Generated</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">Pending</span>
-                                    }
-                                </h6>
-                                @if (Model.Prescription != null)
-                                {
-                                    <div>
-                                        <div class="small mb-1"><span class="text-muted">Date:</span> @Model.Prescription.prescriptiondate.ToString("yyyy-MM-dd")</div>
-                                        <div class="small mb-2"><span class="text-muted">Instructions:</span> @Model.Prescription.notes</div>
-                                        
-                                        <!-- Medicines List -->
-                                        @if (Model.Prescription.items != null && Model.Prescription.items.Any())
-                                        {
-                                            <ul class="list-group list-group-flush border-top pt-2">
-                                                @foreach (var item in Model.Prescription.items)
-                                                {
-                                                    <li class="list-group-item px-0 py-1 bg-transparent small d-flex justify-content-between">
-                                                        <span>@item.Medicine?.Name</span>
-                                                        <span class="text-muted">Qty: @item.quantity</span>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        }
-                                    </div>
-                                }
-                                else
-                                {
-                                    <p class="text-muted small">No prescription has been created for this visit yet.</p>
-                                    <a href="/Prescription/AddPrescription?visitId=@Model.visitid" class="btn btn-sm btn-outline-primary">Add Prescription</a>
-                                }
-                            </div>
-                        </div>
-                    </div>
+                    <dt class="col-sm-3 small fw-bold text-muted">Patient</dt>
+                    <dd class="col-sm-9">
+                        @(Model.ResponseAppoimentVM?.Patient?.patientname ?? "N/A")
+                        <span class="text-muted">(@(Model.ResponseAppoimentVM?.PhoneNumber ?? "N/A"))</span>
+                    </dd>
 
-                    <div class="col-md-6">
-                        <div class="card h-100 border border-light shadow-sm">
-                            <div class="card-body">
-                                <h6 class="fw-bold mb-3 d-flex justify-content-between align-items-center">
-                                    <span>Invoice</span>
-                                    @if (Model.Invoice != null)
-                                    {
-                                        <span class="badge bg-success">@Model.Invoice.Status</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">Unpaid</span>
-                                    }
-                                </h6>
-                                @if (Model.Invoice != null)
-                                {
-                                    <table class="table table-sm table-borderless mb-0">
-                                        <tr>
-                                            <td class="text-muted small">Invoice ID:</td>
-                                            <td class="small">#@Model.Invoice.InvoiceId</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-muted small">Total:</td>
-                                            <td class="small"><strong>$@Model.Invoice.FinalAmount.ToString("F2")</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-muted small">Issued:</td>
-                                            <td class="small">@Model.Invoice.CreatedAt.ToString("yyyy-MM-dd")</td>
-                                        </tr>
-                                    </table>
-                                }
-                                else
-                                {
-                                    <p class="text-muted small">No invoice has been generated for this visit yet.</p>
-                                    <a href="/Invoice/CreateInvoice?visitId=@Model.visitid" class="btn btn-sm btn-outline-primary">Generate Invoice</a>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <dt class="col-sm-3 small fw-bold text-muted">Doctor</dt>
+                    <dd class="col-sm-9">@(Model.ResponseAppoimentVM?.DoctorName ?? "N/A")</dd>
 
-            </div>
-            <div class="card-footer bg-white py-3 text-end">
-                <div class="btn-group">
-                    <a asp-action="UpdateVisit" asp-route-id="@Model.visitid" class="btn btn-warning">Edit Visit info</a>
-                    <form asp-action="RemoveVisit" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this visit record?');">
-                        <input type="hidden" name="id" value="@Model.visitid" />
-                        <button type="submit" class="btn btn-danger">Delete Record</button>
-                    </form>
+                    <dt class="col-sm-3 small fw-bold text-muted">Visit Date</dt>
+                    <dd class="col-sm-9">@Model.visitdate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Consultation Fee</dt>
+                    <dd class="col-sm-9"><strong class="text-primary">$@(Model.ResponseAppoimentVM?.cost.ToString("F2") ?? "0.00")</strong></dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Diagnosis</dt>
+                    <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.diagnosis) ? "No diagnosis recorded yet." : Model.diagnosis)</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Notes</dt>
+                    <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.notes) ? "No notes recorded yet." : Model.notes)</dd>
+                </dl>
+
+                <hr>
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <a asp-action="ListVisits" class="btn btn-light border text-muted">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                    <div class="btn-group">
+                        <a asp-action="UpdateVisit" asp-route-id="@Model.visitid" class="btn btn-primary fw-bold">
+                            <i class="fas fa-edit me-1"></i> Edit
+                        </a>
+                        <form asp-action="RemoveVisit" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this visit record?');">
+                            <input type="hidden" name="id" value="@Model.visitid" />
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i> Delete
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-file-medical me-2"></i>Prescription</h5>
+                        @if (Model.Prescription != null)
+                        {
+                            <span class="badge rounded-pill bg-success">Generated</span>
+                        }
+                        else
+                        {
+                            <span class="badge rounded-pill bg-secondary">Pending</span>
+                        }
+                    </div>
+                    <div class="card-body p-4">
+                        @if (Model.Prescription != null)
+                        {
+                            <dl class="row mb-2">
+                                <dt class="col-sm-4 small fw-bold text-muted">Date</dt>
+                                <dd class="col-sm-8">@Model.Prescription.prescriptiondate.ToString("yyyy-MM-dd")</dd>
+
+                                <dt class="col-sm-4 small fw-bold text-muted">Instructions</dt>
+                                <dd class="col-sm-8">@(string.IsNullOrWhiteSpace(Model.Prescription.notes) ? "—" : Model.Prescription.notes)</dd>
+                            </dl>
+
+                            @if (Model.Prescription.items != null && Model.Prescription.items.Any())
+                            {
+                                <hr />
+                                <p class="small fw-bold text-muted mb-2">Medicines</p>
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var item in Model.Prescription.items)
+                                    {
+                                        <li class="list-group-item px-0 py-1 small d-flex justify-content-between">
+                                            <span><i class="fas fa-pills text-primary me-1"></i>@item.Medicine?.Name</span>
+                                            <span class="text-muted">Qty: @item.quantity</span>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted small">No prescription has been created for this visit yet.</p>
+                            <a href="/Prescription/AddPrescription?visitId=@Model.visitid" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i> Add Prescription
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-file-invoice-dollar me-2"></i>Invoice</h5>
+                        @if (Model.Invoice != null)
+                        {
+                            <span class="badge rounded-pill bg-success">@Model.Invoice.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge rounded-pill bg-secondary">Unpaid</span>
+                        }
+                    </div>
+                    <div class="card-body p-4">
+                        @if (Model.Invoice != null)
+                        {
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4 small fw-bold text-muted">Invoice ID</dt>
+                                <dd class="col-sm-8">#@Model.Invoice.InvoiceId</dd>
+                                <dt class="col-sm-4 small fw-bold text-muted">Total</dt>
+                                <dd class="col-sm-8"><strong class="text-primary">$@Model.Invoice.FinalAmount.ToString("F2")</strong></dd>
+
+                                <dt class="col-sm-4 small fw-bold text-muted">Issued</dt>
+                                <dd class="col-sm-8">@Model.Invoice.CreatedAt.ToString("yyyy-MM-dd")</dd>
+                            </dl>
+                        }
+                        else
+                        {
+                            <p class="text-muted small">No invoice has been generated for this visit yet.</p>
+                            <a href="/Invoice/CreateInvoice?visitId=@Model.visitid" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i> Generate Invoice
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

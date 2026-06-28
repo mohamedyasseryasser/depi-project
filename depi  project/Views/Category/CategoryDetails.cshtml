@@ -4,35 +4,46 @@
     ViewData["Title"] = "Category Details";
 }
 
-<div class="card border-0 shadow-sm">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start">
-            <div>
-                <h4 class="fw-bold mb-1">@Model.cat_name</h4>
-                <span class="badge rounded-pill @(Model.isactive ? "bg-success" : "bg-secondary")">
-                    @(Model.isactive ? "Active" : "Inactive")
-                </span>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-tag me-2"></i>Category Details</h5>
             </div>
-            <div class="btn-group">
-                @if (Model.isactive)
-                {
-                    <a asp-action="UpdateCategory" asp-route-id="@Model.cat_id"
-                       class="btn btn-outline-warning">Edit</a>
-                }
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-sm-3 small fw-bold text-muted">Category ID</dt>
+                    <dd class="col-sm-9">#@Model.cat_id</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Category Name</dt>
+                    <dd class="col-sm-9">@Model.cat_name</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Description</dt>
+                    <dd class="col-sm-9">
+                        @(string.IsNullOrWhiteSpace(Model.cat_description) ? "No description" : Model.cat_description)
+                    </dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Added By</dt>
+                    <dd class="col-sm-9">@(Model.AddedBy ?? "-")</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Status</dt>
+                    <dd class="col-sm-9">@(Model.isactive ? "Active" : "Inactive")</dd>
+                </dl>
+
+                <hr>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="ListCategories" class="btn btn-light border text-muted">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
+                    @if (Model.isactive)
+                    {
+                        <a asp-action="UpdateCategory" asp-route-id="@Model.cat_id" class="btn btn-primary px-5 fw-bold">
+                            <i class="fas fa-edit me-1"></i> Edit
+                        </a>
+                    }
+                </div>
             </div>
         </div>
-        <hr />
-        <dl class="row mb-0">
-            <dt class="col-sm-3">Category ID</dt>
-            <dd class="col-sm-9">#@Model.cat_id</dd>
-
-            <dt class="col-sm-3">Description</dt>
-            <dd class="col-sm-9">
-                @(string.IsNullOrWhiteSpace(Model.cat_description) ? "No description" : Model.cat_description)
-            </dd>
-
-            <dt class="col-sm-3">Added By</dt>
-            <dd class="col-sm-9">@(Model.AddedBy ?? "-")</dd>
-        </dl>
     </div>
 </div>

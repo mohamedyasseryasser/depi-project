@@ -4,74 +4,89 @@
     ViewData["Title"] = "Prescription Details";
 }
 
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start">
-            <div>
-                <h4 class="fw-bold mb-1">Prescription #@Model.prescriptionid</h4>
-                <p class="text-muted mb-0">@Model.prescriptiondate.ToString("yyyy-MM-dd")</p>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-file-medical me-2"></i>Prescription Details</h5>
             </div>
-            <div class="btn-group">
-                <a asp-action="Edit" asp-route-id="@Model.prescriptionid" class="btn btn-outline-warning">Edit</a>
-                <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-sm-3 small fw-bold text-muted">Prescription ID</dt>
+                    <dd class="col-sm-9">#@Model.prescriptionid</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Prescription Date</dt>
+                    <dd class="col-sm-9">@Model.prescriptiondate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Visit</dt>
+                    <dd class="col-sm-9">
+                        <a asp-controller="Visit" asp-action="VisitDetails" asp-route-id="@Model.visitid">Visit #@Model.visitid</a>
+                        @if (Model.VisitDate.HasValue)
+                        {
+                            <span class="text-muted">(@Model.VisitDate.Value.ToString("yyyy-MM-dd"))</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Patient</dt>
+                    <dd class="col-sm-9">@Model.patientname <span class="text-muted">(@Model.phonenumber)</span></dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Doctor</dt>
+                    <dd class="col-sm-9">@Model.DoctorName</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Notes</dt>
+                    <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.notes) ? "—" : Model.notes)</dd>
+                </dl>
+
+                <hr>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-light border text-muted">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@Model.prescriptionid" class="btn btn-primary px-5 fw-bold">
+                        <i class="fas fa-edit me-1"></i> Edit
+                    </a>
+                </div>
             </div>
         </div>
-        <hr />
-        <dl class="row mb-0">
-            <dt class="col-sm-3">Visit</dt>
-            <dd class="col-sm-9">
-                <a asp-controller="Visit" asp-action="VisitDetails" asp-route-id="@Model.visitid">Visit #@Model.visitid</a>
-                @if (Model.VisitDate.HasValue)
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-capsules me-2"></i>Prescription Items</h5>
+                <span class="badge rounded-pill bg-primary-subtle text-primary fw-bold">@Model.prescriptionitems.Count() Total</span>
+            </div>
+            <div class="card-body p-4">
+                @if (Model.prescriptionitems.Any())
                 {
-                    <span class="text-muted">(@Model.VisitDate.Value.ToString("yyyy-MM-dd"))</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Patient</dt>
-            <dd class="col-sm-9">@Model.patientname <span class="text-muted">(@Model.phonenumber)</span></dd>
-            <dt class="col-sm-3">Doctor</dt>
-            <dd class="col-sm-9">@Model.DoctorName</dd>
-            <dt class="col-sm-3">Notes</dt>
-            <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.notes) ? "—" : Model.notes)</dd>
-        </dl>
-    </div>
-</div>
-
-<div class="card border-0 shadow-sm">
-    <div class="card-body">
-        <h5 class="fw-bold mb-3">Prescription Items</h5>
-        @if (Model.prescriptionitems.Any())
-        {
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th>Medicine</th>
-                            <th>Dosage</th>
-                            <th>Frequency</th>
-                            <th>Duration</th>
-                            <th>Qty</th>
-                            <th>Instructions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <div class="row g-3">
                         @foreach (var item in Model.prescriptionitems)
                         {
-                            <tr>
-                                <td class="fw-bold">@item.Name</td>
-                                <td>@item.Dosage</td>
-                                <td>@item.Frequency</td>
-                                <td>@item.Duration</td>
-                                <td>@item.quantity</td>
-                                <td>@item.Instructions</td>
-                            </tr>
+                            <div class="col-md-6">
+                                <div class="p-3 rounded border bg-light">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                            <i class="fas fa-pills text-primary"></i>
+                                        </div>
+                                        <span class="fw-bold">@item.Name</span>
+                                    </div>
+                                    <div class="small text-muted"><i class="fas fa-capsules me-1"></i>Dosage: @item.Dosage</div>
+                                    <div class="small text-muted"><i class="fas fa-clock me-1"></i>Frequency: @item.Frequency</div>
+                                    <div class="small text-muted"><i class="fas fa-calendar me-1"></i>Duration: @item.Duration</div>
+                                    <div class="small text-muted"><i class="fas fa-boxes me-1"></i>Qty: @item.quantity</div>
+                                    @if (!string.IsNullOrWhiteSpace(item.Instructions))
+                                    {
+                                        <div class="small text-muted mt-1"><i class="fas fa-info-circle me-1"></i>@item.Instructions</div>
+                                    }
+                                </div>
+                            </div>
                         }
-                    </tbody>
-                </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No items recorded.</p>
+                }
             </div>
-        }
-        else
-        {
-            <p class="text-muted mb-0">No items recorded.</p>
-        }
+        </div>
+
     </div>
 </div>

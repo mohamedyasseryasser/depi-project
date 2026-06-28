@@ -4,107 +4,118 @@
     ViewData["Title"] = "Doctor Details";
 }
 
-<h1>Doctor Details</h1>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-user-md me-2"></i>Doctor Details</h5>
+            </div>
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.DoctorId)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.DoctorId)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.UserName)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.UserName)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.PhoneNumber)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.address)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.address)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.Gender)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Gender)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.Specialization)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Specialization)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.hiredate)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.hiredate)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.salary)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.salary)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.DepartmentId)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.DepartmentId)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.deptname)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.deptname)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.status)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.status)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.IsActive)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.createdat)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.createdat)
+                    </dd>
+                    <dt class="col-sm-3 small fw-bold text-muted">
+                        @Html.DisplayNameFor(model => model.updatedat)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.updatedat)
+                    </dd>
+                </dl>
 
-<div>
-    <h4>Doctor</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DoctorId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DoctorId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Specialization)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Specialization)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.hiredate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.hiredate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.salary)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.salary)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DepartmentId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DepartmentId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.deptname)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.deptname)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.status)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.createdat)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.createdat)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.updatedat)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.updatedat)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="UpdateDoctor" asp-route-doctorId="@Model.DoctorId">Edit</a> |
-    <a asp-action="ListDoctors">Back to List</a>
-</div>
+                <hr>
 
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="ListDoctors" class="btn btn-light border text-muted">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                    <a asp-action="UpdateDoctor" asp-route-doctorId="@Model.DoctorId" class="btn btn-primary px-5 fw-bold">
+                        <i class="fas fa-edit me-1"></i> Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 

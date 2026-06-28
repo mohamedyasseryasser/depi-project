@@ -4,120 +4,144 @@
     ViewData["Title"] = "Patient Details";
 }
 
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start">
-            <div>
-                <h4 class="fw-bold mb-1">@Model.patientname</h4>
-                <span class="badge rounded-pill @(Model.isvalid ? "bg-success" : "bg-secondary")">
-                    @(Model.isvalid ? "Valid" : "Inactive")
-                </span>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-user-injured me-2"></i>Patient Details</h5>
             </div>
-            <div class="btn-group">
-                <a asp-action="UpdatePatient" asp-route-id="@Model.patientid" class="btn btn-outline-warning">Edit</a>
-                <a asp-action="ListPatients" class="btn btn-outline-secondary">Back</a>
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-sm-3 small fw-bold text-muted">Patient Name</dt>
+                    <dd class="col-sm-9">@Model.patientname</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Patient ID</dt>
+                    <dd class="col-sm-9">#@Model.patientid</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Phone</dt>
+                    <dd class="col-sm-9">@Model.phonenumber</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Gender</dt>
+                    <dd class="col-sm-9">@Model.Gender</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Date Of Birth</dt>
+                    <dd class="col-sm-9">@Model.datebirth.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">National ID</dt>
+                    <dd class="col-sm-9">@(Model.nationalid?.ToString() ?? "-")</dd>
+
+                    <dt class="col-sm-3 small fw-bold text-muted">Status</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge rounded-pill @(Model.isvalid ? "bg-success" : "bg-secondary")">
+                            @(Model.isvalid ? "Valid" : "Inactive")
+                        </span>
+                    </dd>
+                </dl>
+
+                <hr>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="ListPatients" class="btn btn-light border text-muted">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
+                    <a asp-action="UpdatePatient" asp-route-id="@Model.patientid" class="btn btn-primary px-5 fw-bold">
+                        <i class="fas fa-edit me-1"></i> Edit
+                    </a>
+                </div>
             </div>
         </div>
-        <hr />
-        <dl class="row mb-0">
-            <dt class="col-sm-3">Patient ID</dt>
-            <dd class="col-sm-9">#@Model.patientid</dd>
-            <dt class="col-sm-3">Phone</dt>
-            <dd class="col-sm-9">@Model.phonenumber</dd>
-            <dt class="col-sm-3">Gender</dt>
-            <dd class="col-sm-9">@Model.Gender</dd>
-            <dt class="col-sm-3">Date Of Birth</dt>
-            <dd class="col-sm-9">@Model.datebirth.ToString("yyyy-MM-dd")</dd>
-            <dt class="col-sm-3">National ID</dt>
-            <dd class="col-sm-9">@(Model.nationalid?.ToString() ?? "-")</dd>
-        </dl>
-    </div>
-</div>
 
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <h5 class="fw-bold mb-3">Appointments</h5>
-        @if (Model.Appointments.Any())
-        {
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Start</th>
-                            <th>End</th>
-                            <th>Doctor</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-calendar-check me-2"></i>Appointments</h5>
+                <span class="badge rounded-pill bg-primary-subtle text-primary fw-bold">@Model.Appointments.Count() Total</span>
+            </div>
+            <div class="card-body p-4">
+                @if (Model.Appointments.Any())
+                {
+                    <div class="row g-3">
                         @foreach (var appointment in Model.Appointments)
                         {
-                            <tr>
-                                <td>#@appointment.appoimentid</td>
-                                <td>@appointment.Appoinmentdate.ToString("yyyy-MM-dd")</td>
-                                <td>@appointment.startat.ToString("HH:mm")</td>
-                                <td>@appointment.endat.ToString("HH:mm")</td>
-                                <td>@(appointment.DoctorName ?? "-")</td>
-                                <td>@appointment.status</td>
-                            </tr>
+                            var badgeClass = appointment.status switch
+                            {
+                                depi__project.enums.AppointmentStatus.Pending => "bg-warning text-dark",
+                                depi__project.enums.AppointmentStatus.Confirmed => "bg-primary text-white",
+                                depi__project.enums.AppointmentStatus.Completed => "bg-success text-white",
+                                depi__project.enums.AppointmentStatus.Cancelled => "bg-danger text-white",
+                                depi__project.enums.AppointmentStatus.NoShow => "bg-secondary text-white",
+                                _ => "bg-info text-white"
+                            };
+                            <div class="col-md-6">
+                                <div class="p-3 rounded border bg-light">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <span class="fw-bold">#@appointment.appoimentid</span>
+                                        <span class="badge rounded-pill @badgeClass">@appointment.status</span>
+                                    </div>
+                                    <div class="small text-muted"><i class="fas fa-calendar me-1"></i>@appointment.Appoinmentdate.ToString("yyyy-MM-dd")</div>
+                                    <div class="small text-muted"><i class="fas fa-clock me-1"></i>@appointment.startat.ToString("HH:mm") - @appointment.endat.ToString("HH:mm")</div>
+                                    <div class="small text-muted"><i class="fas fa-user-md me-1"></i>@(appointment.DoctorName ?? "-")</div>
+                                </div>
+                            </div>
                         }
-                    </tbody>
-                </table>
-            </div>
-        }
-        else
-        {
-            <p class="text-muted mb-0">No appointments yet.</p>
-        }
-    </div>
-</div>
-
-<div class="row g-4">
-    <div class="col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h5 class="fw-bold mb-3">Visits</h5>
-                @if (Model.Visits.Any())
-                {
-                    <ul class="list-group list-group-flush">
-                        @foreach (var visit in Model.Visits)
-                        {
-                            <li class="list-group-item px-0">
-                                <div class="fw-bold">@visit.visitdate.ToString("yyyy-MM-dd") - @visit.visitstatus</div>
-                                <div class="small text-muted">@visit.diagnosis</div>
-                            </li>
-                        }
-                    </ul>
+                    </div>
                 }
                 else
                 {
-                    <p class="text-muted mb-0">No visits yet.</p>
+                    <p class="text-muted mb-0">No appointments yet.</p>
                 }
             </div>
         </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h5 class="fw-bold mb-3">Invoices</h5>
-                @if (Model.Invoices.Any())
-                {
-                    <ul class="list-group list-group-flush">
-                        @foreach (var invoice in Model.Invoices)
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-clipboard-list me-2"></i>Visits</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        @if (Model.Visits.Any())
                         {
-                            <li class="list-group-item px-0 d-flex justify-content-between">
-                                <span>#@invoice.InvoiceId - @invoice.Status</span>
-                                <strong>@invoice.FinalAmount.ToString("C")</strong>
-                            </li>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var visit in Model.Visits)
+                                {
+                                    <li class="list-group-item px-0">
+                                        <div class="fw-bold">@visit.visitdate.ToString("yyyy-MM-dd") - @visit.visitstatus</div>
+                                        <div class="small text-muted">@visit.diagnosis</div>
+                                    </li>
+                                }
+                            </ul>
                         }
-                    </ul>
-                }
-                else
-                {
-                    <p class="text-muted mb-0">No invoices yet.</p>
-                }
+                        else
+                        {
+                            <p class="text-muted mb-0">No visits yet.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-file-invoice-dollar me-2"></i>Invoices</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        @if (Model.Invoices.Any())
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var invoice in Model.Invoices)
+                                {
+                                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                        <span>#@invoice.InvoiceId - @invoice.Status</span>
+                                        <strong class="text-primary">@invoice.FinalAmount.ToString("C")</strong>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">No invoices yet.</p>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>

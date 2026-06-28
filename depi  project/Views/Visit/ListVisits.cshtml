@@ -1,3 +1,4 @@
+
 @model IEnumerable<depi__project.viewmodels.Visit.ResponseVisitVM>
 
 @{
@@ -8,20 +9,24 @@
     <div class="card-body">
         <div class="row align-items-center">
             <div class="col">
-                <h5 class="mb-0 fw-bold">Search Visits</h5>
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-stethoscope me-2"></i>Search Visits</h5>
             </div>
             <div class="col-auto">
-                <a asp-action="AddVisit" class="btn btn-primary">Start New Visit</a>
+                <a asp-action="AddVisit" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i> Start New Visit
+                </a>
             </div>
         </div>
         <hr />
         <form asp-action="ListVisits" method="get" class="row g-3">
             <div class="col-md-7">
-                <label class="form-label small fw-bold">Search Term</label>
-                <input type="text" name="searchTerm" class="form-control" placeholder="Search patient name, phone, diagnosis..." value="@ViewBag.SearchTerm" />
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="searchTerm" class="form-control bg-light border-start-0"
+                           placeholder="Search patient name, phone, diagnosis..." value="@ViewBag.SearchTerm" />
+                </div>
             </div>
             <div class="col-md-3">
-                <label class="form-label small fw-bold">Status</label>
                 <select name="status" class="form-select">
                     <option value="">All statuses</option>
                     @foreach (var status in Enum.GetValues(typeof(depi__project.enums.VisitStatus)))
@@ -30,7 +35,7 @@
                     }
                 </select>
             </div>
-            <div class="col-md-2 d-flex align-items-end">
+            <div class="col-md-2">
                 <div class="btn-group w-100">
                     <button type="submit" class="btn btn-secondary">Search</button>
                     <a asp-action="ListVisits" class="btn btn-outline-secondary">Reset</a>
@@ -42,46 +47,55 @@
 
 <div class="card border-0 shadow-sm">
     <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="ps-4">ID</th>
-                        <th>Patient</th>
-                        <th>Visit Date</th>
-                        <th>Diagnosis</th>
-                        <th>Notes</th>
-                        <th>Appointment ID</th>
-                        <th>Status</th>
-                        <th class="text-end pe-4">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model == null || !Model.Any())
-                    {
+        @if (Model == null || !Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-stethoscope fa-3x mb-3 opacity-25"></i>
+                <p class="mb-0">No visits found.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
                         <tr>
-                            <td colspan="8" class="text-center py-4 text-muted">No visits found.</td>
+                            <th class="ps-4">ID</th>
+                            <th>Patient</th>
+                            <th>Visit Date</th>
+                            <th>Diagnosis</th>
+                            <th>Notes</th>
+                            <th>Appointment ID</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Actions</th>
                         </tr>
-                    }
-                    else
-                    {
-                        foreach (var item in Model)
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
                         {
                             <tr>
-                                <td class="ps-4 text-muted">#@item.visitid</td>
-                                <td class="fw-bold">@(item.ResponseAppoimentVM?.Patient?.patientname ?? "N/A")</td>
-                                <td>@item.visitdate.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td class="ps-4 text-muted small">#@item.visitid</td>
                                 <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-2 fw-bold"
+                                             style="width: 34px; height: 34px; font-size: 0.85rem;">
+                                            @((item.ResponseAppoimentVM?.Patient?.patientname)?.Substring(0, 1).ToUpper() ?? "P")
+                                        </div>
+                                        <span class="fw-bold">@(item.ResponseAppoimentVM?.Patient?.patientname ?? "N/A")</span>
+                                    </div>
+                                </td>
+                                <td class="small">@item.visitdate.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td class="small">
                                     <span class="text-truncate d-inline-block" style="max-width: 150px;" title="@item.diagnosis">
                                         @(string.IsNullOrWhiteSpace(item.diagnosis) ? "-" : item.diagnosis)
                                     </span>
                                 </td>
-                                <td>
+                                <td class="small">
                                     <span class="text-truncate d-inline-block" style="max-width: 150px;" title="@item.notes">
                                         @(string.IsNullOrWhiteSpace(item.notes) ? "-" : item.notes)
                                     </span>
                                 </td>
-                                <td>
+                                <td class="small text-muted">
                                     <a asp-controller="Appoinment" asp-action="AppoinmentDetails" asp-route-id="@item.appoinmentid">#@item.appoinmentid</a>
                                 </td>
                                 <td>
@@ -97,42 +111,55 @@
                                 </td>
                                 <td class="text-end pe-4">
                                     <div class="btn-group">
-                                        <a asp-action="VisitDetails" asp-route-id="@item.visitid" class="btn btn-sm btn-outline-info">Details</a>
-                                        <a asp-action="UpdateVisit" asp-route-id="@item.visitid" class="btn btn-sm btn-outline-warning">Edit</a>
-                                        <form asp-action="RemoveVisit" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this visit record?');">
+                                        <a asp-action="VisitDetails" asp-route-id="@item.visitid"
+                                           class="btn btn-sm btn-outline-info" title="Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="UpdateVisit" asp-route-id="@item.visitid"
+                                           class="btn btn-sm btn-outline-warning" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-action="RemoveVisit" method="post" class="d-inline"
+                                              onsubmit="return confirm('Are you sure you want to delete this visit record?');">
                                             <input type="hidden" name="id" value="@item.visitid" />
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         }
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
     <div class="card-footer bg-white py-3">
         @{
             var prevDisabled = (ViewBag.PageNumber <= 1) ? "disabled" : "";
-            var nextDisabled = (Model == null || !Model.Any() || Model.Count() < ViewBag.PageSize) ? "disabled" : "";
+            var nextDisabled = (Model == null! || Model.Any() || Model.Count() < ViewBag.PageSize) ? "disabled" : "";
         }
         <nav aria-label="Page navigation">
             <ul class="pagination pagination-sm justify-content-center mb-0">
                 <li class="page-item @prevDisabled">
-                    <a class="page-link" asp-action="ListVisits" 
-                       asp-route-pageNumber="@(ViewBag.PageNumber - 1)" 
-                       asp-route-pageSize="@ViewBag.PageSize" 
-                       asp-route-searchTerm="@ViewBag.SearchTerm" 
-                       asp-route-status="@ViewBag.Status">Previous</a>
+                    <a class="page-link" asp-action="ListVisits"
+                       asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
+                       asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-status="@ViewBag.Status">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
                 </li>
                 <li class="page-item disabled"><span class="page-link">Page @ViewBag.PageNumber</span></li>
                 <li class="page-item @nextDisabled">
-                    <a class="page-link" asp-action="ListVisits" 
-                       asp-route-pageNumber="@(ViewBag.PageNumber + 1)" 
-                       asp-route-pageSize="@ViewBag.PageSize" 
-                       asp-route-searchTerm="@ViewBag.SearchTerm" 
-                       asp-route-status="@ViewBag.Status">Next</a>
+                    <a class="page-link" asp-action="ListVisits"
+                       asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
+                       asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-status="@ViewBag.Status">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
                 </li>
             </ul>
         </nav>

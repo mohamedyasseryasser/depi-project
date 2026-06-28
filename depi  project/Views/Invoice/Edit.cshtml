@@ -4,69 +4,79 @@
     ViewData["Title"] = "Edit Invoice";
 }
 
-<div class="card border-0 shadow-sm">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0 fw-bold">Edit Invoice #@Model.InvoiceId</h5>
-            <a asp-action="Details" asp-route-id="@Model.InvoiceId" class="btn btn-outline-secondary btn-sm">Back</a>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-file-invoice-dollar me-2"></i>Edit Invoice #@Model.InvoiceId</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="InvoiceId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-4 small"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="VisitId" class="form-label small fw-bold text-muted"></label>
+                            <select asp-for="VisitId" asp-items="Model.Visits" class="form-select bg-light"></select>
+                            <span asp-validation-for="VisitId" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Status" class="form-label small fw-bold text-muted"></label>
+                            <select asp-for="Status" asp-items="Html.GetEnumSelectList<depi__project.enums.InvoiceStatus>()" class="form-select bg-light"></select>
+                            <span asp-validation-for="Status" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="TotalAmount" class="form-label small fw-bold text-muted"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">$</span>
+                                <input asp-for="TotalAmount" class="form-control calc-field bg-light" step="0.01" />
+                            </div>
+                            <span asp-validation-for="TotalAmount" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Tax" class="form-label small fw-bold text-muted"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">$</span>
+                                <input asp-for="Tax" class="form-control calc-field bg-light" step="0.01" />
+                            </div>
+                            <span asp-validation-for="Tax" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Discount" class="form-label small fw-bold text-muted"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">$</span>
+                                <input asp-for="Discount" class="form-control calc-field bg-light" step="0.01" />
+                            </div>
+                            <span asp-validation-for="Discount" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="alert alert-light border d-flex justify-content-between align-items-center mb-0">
+                                <span class="fw-bold">Final Amount</span>
+                                <span class="fs-4 text-primary fw-bold">$<span id="finalAmountDisplay">@Model.FinalAmount.ToString("F2")</span></span>
+                            </div>
+                            <input asp-for="FinalAmount" type="hidden" id="FinalAmount" />
+                        </div>
+                    </div>
+
+                    <hr><div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Details" asp-route-id="@Model.InvoiceId" class="btn btn-light border text-muted">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-primary px-5 fw-bold">
+                        <i class="fas fa-save me-1"></i> Update Invoice
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <form asp-action="Edit" method="post" class="row g-3">
-            <input type="hidden" asp-for="InvoiceId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="col-md-6">
-                <label asp-for="VisitId" class="form-label"></label>
-                <select asp-for="VisitId" asp-items="Model.Visits" class="form-select"></select>
-                <span asp-validation-for="VisitId" class="text-danger"></span>
-            </div>
-
-            <div class="col-md-6">
-                <label asp-for="Status" class="form-label"></label>
-                <select asp-for="Status" asp-items="Html.GetEnumSelectList<depi__project.enums.InvoiceStatus>()" class="form-select"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-
-            <div class="col-md-4">
-                <label asp-for="TotalAmount" class="form-label"></label>
-                <div class="input-group">
-                    <span class="input-group-text">$</span>
-                    <input asp-for="TotalAmount" class="form-control calc-field" step="0.01" />
-                </div>
-                <span asp-validation-for="TotalAmount" class="text-danger"></span>
-            </div>
-
-            <div class="col-md-4">
-                <label asp-for="Tax" class="form-label"></label>
-                <div class="input-group">
-                    <span class="input-group-text">$</span>
-                    <input asp-for="Tax" class="form-control calc-field" step="0.01" />
-                </div>
-                <span asp-validation-for="Tax" class="text-danger"></span>
-            </div>
-
-            <div class="col-md-4">
-                <label asp-for="Discount" class="form-label"></label>
-                <div class="input-group">
-                    <span class="input-group-text">$</span>
-                    <input asp-for="Discount" class="form-control calc-field" step="0.01" />
-                </div>
-                <span asp-validation-for="Discount" class="text-danger"></span>
-            </div>
-
-            <div class="col-12">
-                <div class="alert alert-light border d-flex justify-content-between align-items-center mb-0">
-                    <span class="fw-bold">Final Amount</span>
-                    <span class="fs-4 text-primary fw-bold">$<span id="finalAmountDisplay">@Model.FinalAmount.ToString("F2")</span></span>
-                </div>
-                <input asp-for="FinalAmount" type="hidden" id="FinalAmount" />
-            </div>
-
-            <div class="col-12 text-end">
-                <button type="submit" class="btn btn-primary">Update Invoice</button>
-            </div>
-        </form>
     </div>
+</div>
 </div>
 
 @section Scripts {

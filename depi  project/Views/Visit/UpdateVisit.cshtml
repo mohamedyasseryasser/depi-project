@@ -4,41 +4,51 @@
     ViewData["Title"] = "Update Visit Record";
 }
 
-<div class="row">
-    <div class="col-md-8 mx-auto">
+<div class="row justify-content-center">
+    <div class="col-md-10">
         <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0 fw-bold text-primary">Edit Visit Record #@Model.visitid</h5>
-                    <a asp-action="VisitDetails" asp-route-id="@Model.visitid" class="btn btn-outline-secondary btn-sm">Cancel</a>
-                </div>
-                <hr />
-
-                <form asp-action="SaveUpdateVisit" method="post" class="row g-3">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-clipboard-list me-2"></i>Edit Visit Record #@Model.visitid</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="SaveUpdateVisit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-4 small"></div>
                     <input type="hidden" asp-for="visitid" />
 
-                    <div class="col-md-12">
-                        <label asp-for="visitstatus" class="form-label fw-bold">Visit Status</label>
-                        <select asp-for="visitstatus" asp-items="Html.GetEnumSelectList<depi__project.enums.VisitStatus>()" class="form-select fs-5 py-2"></select>
-                        <span asp-validation-for="visitstatus" class="text-danger small"></span>
-                        <div class="form-text text-muted small">Setting status to 'Completed' will also automatically mark the linked appointment as 'Completed'.</div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="visitstatus" class="form-label small fw-bold text-muted">Visit Status</label>
+                            <select asp-for="visitstatus" asp-items="Html.GetEnumSelectList<depi__project.enums.VisitStatus>()" class="form-select bg-light"></select>
+                            <span asp-validation-for="visitstatus" class="text-danger small"></span>
+                            <div class="form-text text-muted small">Setting status to 'Completed' will also automatically mark the linked appointment as 'Completed'.</div>
+                        </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <label asp-for="diagnosis" class="form-label fw-bold">Diagnosis</label>
-                        <input asp-for="diagnosis" class="form-control py-2" />
-                        <span asp-validation-for="diagnosis" class="text-danger small"></span>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="diagnosis" class="form-label small fw-bold text-muted">Diagnosis</label>
+                            <input asp-for="diagnosis" class="form-control bg-light" />
+                            <span asp-validation-for="diagnosis" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <label asp-for="notes" class="form-label fw-bold">Physician Notes</label>
-                        <textarea asp-for="notes" rows="5" class="form-control"></textarea>
-                        <span asp-validation-for="notes" class="text-danger small"></span>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="notes" class="form-label small fw-bold text-muted">Physician Notes</label>
+                            <textarea asp-for="notes" rows="5" class="form-control bg-light"></textarea>
+                            <span asp-validation-for="notes" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn btn-primary px-4 py-2">Save Changes</button>
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="VisitDetails" asp-route-id="@Model.visitid" class="btn btn-light border text-muted">
+                            <i class="fas fa-arrow-left me-1"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">
+                            <i class="fas fa-save me-1"></i> Save Changes
+                        </button>
                     </div>
                 </form>
             </div>
