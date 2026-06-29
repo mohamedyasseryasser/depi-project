@@ -4,6 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Smart Clinic</title>
+
+    <script>
+        if (localStorage.getItem("sidebarCollapsed") === "true") {
+            document.documentElement.classList.add("sidebar-collapsed-pre");
+        }
+    </script>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/depi__project.styles.css" asp-append-version="true" />
@@ -29,6 +36,7 @@
             display: flex;
             flex-direction: column;
             z-index: 1000;
+            transition: width 0.22s ease;
         }
 
         .sidebar-brand {
@@ -49,7 +57,7 @@
         }
 
         .sidebar-brand h6 {
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 700;
             color: #1a1a2e;
             margin: 0;
@@ -62,10 +70,18 @@
             text-transform: uppercase;
         }
 
+        .sidebar-brand .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
         .sidebar-nav {
             flex: 1;
             padding: 16px 12px;
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .sidebar-nav .nav-label {
@@ -75,6 +91,7 @@
             letter-spacing: 1.2px;
             text-transform: uppercase;
             padding: 8px 10px 4px;
+            white-space: nowrap;
         }
 
         .sidebar-nav .nav-link {
@@ -87,8 +104,10 @@
             font-size: 13.5px;
             font-weight: 500;
             text-decoration: none;
-            transition: all 0.18s;
+            transition: background 0.18s, color 0.18s;
             margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .sidebar-nav .nav-link i {
@@ -97,6 +116,7 @@
             font-size: 14px;
             color: #9aa3b2;
             transition: color 0.18s;
+            flex-shrink: 0;
         }
 
         .sidebar-nav .nav-link:hover {
@@ -121,34 +141,127 @@
         .sidebar-footer {
             padding: 14px 16px;
             border-top: 1px solid #f0f2f5;
+        }
+        
+        .sidebar-footer .logout-link {
             display: flex;
             align-items: center;
             gap: 10px;
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #5a6478;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
-        .sidebar-footer .avatar {
-            width: 34px; height: 34px;
-            border-radius: 50%;
-            background: #1a73e8;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
+        .sidebar-footer .logout-link i {
+            width: 18px;
+            text-align: center;
+            font-size: 14px;
+            color: #9aa3b2;
             flex-shrink: 0;
+            transition: color 0.18s;
         }
 
-        .sidebar-footer .user-info h6 {
-            font-size: 12.5px;
-            font-weight: 600;
-            color: #1a1a2e;
+        .sidebar-footer .logout-link:hover {
+            background: #fdecea;
+            color: #dc3545;
+        }
+
+        .sidebar-footer .logout-link:hover i {
+            color: #dc3545;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar.collapsed .sidebar-brand h6,
+        .sidebar.collapsed .sidebar-brand small,
+        .sidebar.collapsed .nav-label,
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .logout-link span {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-brand {
+            text-align: center;
+            padding: 20px 8px 10px;
+        }
+
+        .sidebar.collapsed .nav-link,
+        .sidebar.collapsed .logout-link {
+            justify-content: center;
+            padding: 9px 0;
+            gap: 0;
+            transition: background 0.18s, color 0.18s;
+        }
+
+        .sidebar.collapsed .nav-link i,
+        .sidebar.collapsed .logout-link i {
+            width: auto;
             margin: 0;
         }
 
-        .sidebar-footer .user-info small {
-            font-size: 11px;
-            color: #8a94a6;
+        .sidebar.collapsed ~ .top-navbar,
+        body.sidebar-collapsed .top-navbar {
+            left: 70px;
+        }
+
+        body.sidebar-collapsed .main-content {
+            margin-left: 70px;
+        }
+
+        html.sidebar-collapsed-pre .sidebar {
+            width: 70px;
+            transition: none;
+        }
+
+        html.sidebar-collapsed-pre .sidebar-brand h6,
+        html.sidebar-collapsed-pre .sidebar-brand small,
+        html.sidebar-collapsed-pre .nav-label,
+        html.sidebar-collapsed-pre .nav-link span,
+        html.sidebar-collapsed-pre .logout-link span {
+            display: none;
+        }
+
+        html.sidebar-collapsed-pre .sidebar-brand {
+            text-align: center;
+            padding: 20px 8px 10px;
+        }
+
+        html.sidebar-collapsed-pre .nav-link,
+        html.sidebar-collapsed-pre .logout-link {
+            justify-content: center;
+            padding: 9px 0;
+            gap: 0;
+        }
+
+        html.sidebar-collapsed-pre .nav-link i,
+        html.sidebar-collapsed-pre .logout-link i {
+            width: auto;
+            margin: 0;
+        }
+
+        html.sidebar-collapsed-pre .top-navbar {
+            left: 70px;
+            transition: none;
+        }
+
+        html.sidebar-collapsed-pre .main-content {
+            margin-left: 70px;
+            transition: none;
+        }
+
+        #sidebarCollapseBtn {
+            margin-left: -12px;
         }
 
         /* ── Top Navbar ───────────────────────────────────────── */
@@ -165,35 +278,13 @@
             justify-content: space-between;
             padding: 0 24px;
             z-index: 999;
+            transition: left 0.22s ease;
         }
 
-        .top-navbar .search-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f4f6fb;
-            border: 1px solid #e8edf3;
-            border-radius: 8px;
-            padding: 7px 14px;
-            width: 300px;
-        }
-
-        .top-navbar .search-box i {
-            color: #9aa3b2;
-            font-size: 13px;
-        }
-
-        .top-navbar .search-box input {
-            border: none;
-            background: transparent;
-            outline: none;
-            font-size: 13px;
-            color: #3d4557;
-            width: 100%;
-        }
-
-        .top-navbar .search-box input::placeholder {
-            color: #b0b8c4;
+        .top-navbar .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a2e;
         }
 
         .top-navbar .nav-actions {
@@ -226,7 +317,7 @@
         .top-navbar .admin-profile {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 14px;
             cursor: pointer;
             padding: 6px 12px;
             border-radius: 8px;
@@ -238,10 +329,21 @@
             background: #f4f6fb;
         }
 
-        .top-navbar .admin-profile span {
+        .top-navbar .admin-profile .user-info {
+            text-align: left;
+            line-height: 1.2;
+        }
+
+        .top-navbar .admin-profile .user-info h6 {
             font-size: 13px;
             font-weight: 600;
             color: #1a1a2e;
+            margin: 0;
+        }
+
+        .top-navbar .admin-profile .user-info small {
+            font-size: 11px;
+            color: #8a94a6;
         }
 
         .top-navbar .admin-profile .avatar-sm {
@@ -254,6 +356,14 @@
             justify-content: center;
             font-size: 12px;
             font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .top-navbar .admin-profile .profile-divider {
+            width: 1px;
+            height: 28px;
+            background-color: #c5cbd6;
+            flex-shrink: 0;
         }
 
         /* ── Main Content ─────────────────────────────────────── */
@@ -262,6 +372,7 @@
             margin-top: 60px;
             padding: 28px;
             min-height: calc(100vh - 60px);
+            transition: margin-left 0.22s ease;
         }
 
         /* ── Toast Alerts ─────────────────────────────────────── */
@@ -285,17 +396,24 @@
             .top-navbar { left: 0; }
             .main-content { margin-left: 0; }
             .top-navbar .search-box { width: 160px; }
+            body.sidebar-collapsed .top-navbar,
+            body.sidebar-collapsed .main-content { left: 0; margin-left: 0; }
+            html.sidebar-collapsed-pre .top-navbar,
+            html.sidebar-collapsed-pre .main-content { left: 0; margin-left: 0; }
+            html.sidebar-collapsed-pre .sidebar { width: 220px; }
         }
     </style>
 </head>
 <body>
-
+    
     <!-- ── Sidebar ──────────────────────────────────────────────── -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <div class="brand-icon"><i class="fas fa-clinic-medical"></i></div>
-            <h6>Smart Clinic</h6>
-            <small>EMR Dashboard</small>
+            <div class="brand-row">
+                <div class="brand-icon"><i class="fas fa-clinic-medical"></i></div>
+                <h6>Smart Clinic</h6>
+            </div>
+
         </div>
 
         <nav class="sidebar-nav">
@@ -303,50 +421,50 @@
 
             <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
                asp-controller="Home" asp-action="Index">
-                <i class="fas fa-th-large"></i> Dashboard
+                <i class="fas fa-th-large"></i> <span>Dashboard</span>
             </a>
 
             @if (User.IsInRole("Admin"))
             {
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")"
                    asp-controller="User" asp-action="ListUsers">
-                    <i class="fas fa-user-md"></i> Users
+                    <i class="fas fa-user-md"></i> <span>Users</span>
                 </a>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Department" ? "active" : "")"
                    asp-controller="Department" asp-action="ListDepartments">
-                    <i class="fas fa-building"></i> Departments
+                    <i class="fas fa-building"></i> <span>Departments</span>
                 </a>
 
                 <div class="nav-label mt-2">Operations</div>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
                    asp-controller="Patient" asp-action="ListPatients">
-                    <i class="fas fa-users"></i> Patients
+                    <i class="fas fa-users"></i> <span>Patients</span>
                 </a>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appoinment" ? "active" : "")"
                    asp-controller="Appoinment" asp-action="ListAppoinments">
-                    <i class="fas fa-calendar-check"></i> Appointments
+                    <i class="fas fa-calendar-check"></i> <span>Appointments</span>
                 </a>
 
                 <div class="nav-label mt-2">Pharmacy</div>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
                    asp-controller="Category" asp-action="ListCategories">
-                    <i class="fas fa-tags"></i> Categories
+                    <i class="fas fa-tags"></i> <span>Categories</span>
                 </a>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Medicine" ? "active" : "")"
                    asp-controller="Medicine" asp-action="ListMedicines">
-                    <i class="fas fa-pills"></i> Medicines
+                    <i class="fas fa-pills"></i> <span>Medicines</span>
                 </a>
 
                 <div class="nav-label mt-2">Billing</div>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Invoice" ? "active" : "")"
                    asp-controller="Invoice" asp-action="Index">
-                    <i class="fas fa-file-invoice-dollar"></i> Invoices
+                    <i class="fas fa-file-invoice-dollar"></i> <span>Invoices</span>
                 </a>
             }
             else if (User.IsInRole("Doctor"))
@@ -355,22 +473,20 @@
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appoinment" ? "active" : "")"
                    asp-controller="Appoinment" asp-action="ListAppoinments">
-                    <i class="fas fa-calendar-check"></i> Appointments
+                    <i class="fas fa-calendar-check"></i> <span>Appointments</span>
                 </a>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Visit" ? "active" : "")"
                    asp-controller="Visit" asp-action="ListVisits">
-                    <i class="fas fa-stethoscope"></i> Visits
+                    <i class="fas fa-stethoscope"></i> <span>Visits</span>
                 </a>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Prescription" ? "active" : "")"
                    asp-controller="Prescription" asp-action="Index">
-                    <i class="fas fa-file-prescription"></i> Prescriptions
-                </a>
-
-                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
+                    <i class="fas fa-file-prescription"></i> <span>Prescriptions</span>
+                </a><a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
                    asp-controller="Patient" asp-action="ListPatients">
-                    <i class="fas fa-users"></i> Patients
+                    <i class="fas fa-users"></i> <span>Patients</span>
                 </a>
             }
             else if (User.IsInRole("Receptionist"))
@@ -379,40 +495,32 @@
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
                    asp-controller="Patient" asp-action="ListPatients">
-                    <i class="fas fa-users"></i> Patients
+                    <i class="fas fa-users"></i> <span>Patients</span>
                 </a>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appoinment" ? "active" : "")"
                    asp-controller="Appoinment" asp-action="ListAppoinments">
-                    <i class="fas fa-calendar-check"></i> Appointments
+                    <i class="fas fa-calendar-check"></i> <span>Appointments</span>
                 </a>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Visit" ? "active" : "")"
                    asp-controller="Visit" asp-action="ListVisits">
-                    <i class="fas fa-stethoscope"></i> Visits
+                    <i class="fas fa-stethoscope"></i> <span>Visits</span>
                 </a>
 
                 <div class="nav-label mt-2">Billing</div>
 
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Invoice" ? "active" : "")"
                    asp-controller="Invoice" asp-action="Index">
-                    <i class="fas fa-file-invoice-dollar"></i> Invoices
+                    <i class="fas fa-file-invoice-dollar"></i> <span>Invoices</span>
                 </a>
             }
         </nav>
 
         <div class="sidebar-footer">
-            <div class="avatar">
-                @{ var userName = User.Identity?.Name; }
-                @(string.IsNullOrEmpty(userName) ? "A" : userName[0].ToString().ToUpper())
-            </div>
-            <div class="user-info">
-                <h6>@(User.Identity?.Name ?? "Admin")</h6>
-                <small>@(User.IsInRole("Admin") ? "System Manager" : User.IsInRole("Doctor") ? "Doctor" : User.IsInRole("Receptionist") ? "Receptionist" : "Staff")</small>
-            </div>
-            <form asp-controller="Auth" asp-action="Logout" method="post" class="ms-auto">
-                <button type="submit" class="icon-btn border-0 bg-transparent text-muted" title="Logout">
-                    <i class="fas fa-right-from-bracket"></i>
+            <form asp-controller="Auth" asp-action="Logout" method="post">
+                <button type="submit" class="logout-link" title="Logout">
+                    <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
                 </button>
             </form>
         </div>
@@ -421,13 +529,26 @@
     <!-- ── Top Navbar ────────────────────────────────────────────── -->
     <header class="top-navbar">
         <div class="d-flex align-items-center gap-3">
-            <!-- Mobile toggle -->
+            <button class="icon-btn d-none d-md-flex border-0 bg-transparent" id="sidebarCollapseBtn" title="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
             <button class="icon-btn d-md-none border-0 bg-transparent" onclick="document.getElementById('sidebar').classList.toggle('open')">
                 <i class="fas fa-bars"></i>
             </button>
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search patients by name, ID or phone..." />
+            <h5 class="page-title mb-0">@ViewData["Title"]</h5>
+        </div>
+
+        <div class="admin-profile">
+            <div class="profile-divider"></div>
+            <div class="avatar-sm">
+                @{
+                    var userName = User.Identity?.Name;
+                }
+                @(string.IsNullOrEmpty(userName) ? "A" : userName[0].ToString().ToUpper())
+            </div>
+            <div class="user-info">
+                <h6>@(User.Identity?.Name ?? "Admin")</h6>
+                <small>@(User.IsInRole("Admin") ? "System Manager" : User.IsInRole("Doctor") ? "Doctor" : User.IsInRole("Receptionist") ? "Receptionist" : "Staff")</small>
             </div>
         </div>
     </header>
@@ -435,13 +556,11 @@
     <!-- ── Main Content ──────────────────────────────────────────── -->
     <div class="main-content">
 
-        <!-- Toast Alerts -->
         <div id="toast-container">
             @if (TempData["SuccessMessage"] != null)
             {
                 <div class="card shadow-lg border-0 mb-2 custom-alert animate-fade"
-                     style="border-left: 5px solid #198754 !important; background:#fff;">
-                    <div class="card-body p-3 d-flex align-items-center">
+                     style="border-left: 5px solid #198754 !important; background:#fff;"><div class="card-body p-3 d-flex align-items-center">
                         <i class="fas fa-check-circle me-3 fs-5" style="color:#198754;"></i>
                         <div class="fw-semibold text-dark">@TempData["SuccessMessage"]</div>
                     </div>
@@ -466,8 +585,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
-        // Toast auto-hide
         document.addEventListener("DOMContentLoaded", function () {
+            // Toast auto-hide
             var alerts = document.querySelectorAll('.custom-alert');
             alerts.forEach(function (alert) {
                 alert.style.opacity = "0";
@@ -484,6 +603,25 @@
                     setTimeout(function () { alert.remove(); }, 400);
                 }, 3000);
             });
+
+            var collapseBtn = document.getElementById("sidebarCollapseBtn");
+            var sidebar = document.getElementById("sidebar");
+            var html = document.documentElement;
+
+            if (collapseBtn && sidebar) {
+
+                if (html.classList.contains("sidebar-collapsed-pre")) {
+                    sidebar.classList.add("collapsed");
+                    document.body.classList.add("sidebar-collapsed");
+                }
+                html.classList.remove("sidebar-collapsed-pre");
+
+                collapseBtn.addEventListener("click", function () {
+                    sidebar.classList.toggle("collapsed");
+                    document.body.classList.toggle("sidebar-collapsed");
+                    localStorage.setItem("sidebarCollapsed", sidebar.classList.contains("collapsed"));
+                });
+            }
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
